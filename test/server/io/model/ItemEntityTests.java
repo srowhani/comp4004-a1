@@ -3,7 +3,7 @@ package server.io.model;
 import org.junit.Test;
 
 import static lib.Assert.assertDoesNotThrow;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.assertEquals;
 
 public class ItemEntityTests implements ModelTest {
     @Override
@@ -17,6 +17,19 @@ public class ItemEntityTests implements ModelTest {
     @Override
     @Test
     public void canAccessProperties() {
-        fail("Not yet implemented :(");
+        ItemEntity itemEntity = new ItemEntity();
+
+        int itemId = 1;
+        String isbn = "isbn";
+        String copyNumber = "copyNumber";
+
+        itemEntity.setItemId(itemId);
+        itemEntity.setISBN(isbn);
+        itemEntity.setCopyNumber(copyNumber);
+
+        assertEquals(itemEntity.getItemId(), itemId);
+        assertEquals(itemEntity.getISBN(), isbn);
+        assertEquals(itemEntity.getCopyNumber(), copyNumber);
+
     }
 }

@@ -6,7 +6,7 @@ public class UserEntity {
 	private String password;
 
 	public UserEntity () {
-		
+
 	}
 
 	public UserEntity(int id, String username, String password) {
