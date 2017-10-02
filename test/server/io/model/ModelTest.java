@@ -1,6 +1,6 @@
 package server.io.model;
 
 public interface ModelTest {
-    void canInstantiate();
+    void canInstantiate() throws Exception;
     void canAccessProperties();
 }

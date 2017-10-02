@@ -4,16 +4,15 @@ import org.junit.Test;
 
 import java.util.Date;
 
+import static lib.Assert.assertDoesNotThrow;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 public class LoanEntityTests implements ModelTest {
 
     @Override
     @Test
     public void canInstantiate() {
-        assertNotNull(
-                new LoanEntity(1, "isbn", "copyNumber", new Date(), "renewState"));
+        assertDoesNotThrow(() -> new LoanEntity(1, "isbn", "copyNumber", new Date(), "renewState"));
     }
 
     @Override

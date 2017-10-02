@@ -2,14 +2,14 @@ package server.io.model;
 
 import org.junit.Test;
 
+import static lib.Assert.assertDoesNotThrow;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 public class UserEntityTests implements ModelTest {
 
     @Test
     public void canInstantiate () {
-        assertNotNull(new UserEntity(1, "username", "password"));
+        assertDoesNotThrow(() -> new UserEntity(1, "username", "password"));
     }
 
     @Test

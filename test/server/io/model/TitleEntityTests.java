@@ -2,14 +2,14 @@ package server.io.model;
 
 import org.junit.Test;
 
+import static lib.Assert.assertDoesNotThrow;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 public class TitleEntityTests implements ModelTest {
     @Override
     @Test
     public void canInstantiate () {
-        assertNotNull(new TitleEntity("ISBN", "Title"));
+        assertDoesNotThrow(() -> new TitleEntity("ISBN", "Title"));
     }
     @Override
     @Test
