@@ -16,6 +16,12 @@ public class FeeEntityTests implements GenericModelTest {
     @Override
     @Test
     public void canAccessProperties() {
-        fail("Not yet implem");
+        FeeEntity feeEntity = new FeeEntity();
+
+        int userId = 1,
+            fee = 1;
+
+        feeEntity.setUserId(userId);
+        feeEntity.setFee(fee);
     }
 }
