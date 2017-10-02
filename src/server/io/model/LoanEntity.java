@@ -13,6 +13,10 @@ public class LoanEntity {
 	private Date date;
 	private String renewState;
 
+	public LoanEntity () {
+
+	}
+
 	public LoanEntity(int userId, String isbn, String copyNumber, Date date, String renewState) {
 		this.userId = userId;
 		this.isbn = isbn;

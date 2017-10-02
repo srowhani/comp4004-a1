@@ -3,7 +3,11 @@ package server.io.model;
 public class TitleEntity {
 	private String ISBN;
 	private String booktitle;
-	
+
+	public TitleEntity () {
+		
+	}
+
 	public TitleEntity(String ISBN, String booktitle){
 		this.ISBN=ISBN;
 		this.booktitle=booktitle;

@@ -5,6 +5,10 @@ public class ItemEntity {
 	String isbn;
 	String copyNumber;
 
+	public ItemEntity() {
+
+	}
+
 	public ItemEntity(int itemId, String ISBN, String copyNumber) {
 		this.itemId = itemId;
 		this.isbn = isbn;
