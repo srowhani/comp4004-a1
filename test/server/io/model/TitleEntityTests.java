@@ -5,7 +5,7 @@ import org.junit.Test;
 import static lib.Assert.assertDoesNotThrow;
 import static org.junit.Assert.assertEquals;
 
-public class TitleEntityTests implements ModelTest {
+public class TitleEntityTests implements GenericModelTest {
     @Override
     @Test
     public void canInstantiate () {

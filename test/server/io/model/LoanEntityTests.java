@@ -7,7 +7,7 @@ import java.util.Date;
 import static lib.Assert.assertDoesNotThrow;
 import static org.junit.Assert.assertEquals;
 
-public class LoanEntityTests implements ModelTest {
+public class LoanEntityTests implements GenericModelTest {
 
     @Override
     @Test
