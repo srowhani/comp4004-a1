@@ -6,12 +6,12 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 public class TitleEntityTests implements ModelTest {
-
+    @Override
     @Test
     public void canInstantiate () {
         assertNotNull(new TitleEntity("ISBN", "Title"));
     }
-
+    @Override
     @Test
     public void canAccessProperties () {
         String isbn = "ISBN";
