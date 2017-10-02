@@ -1,8 +1,8 @@
 package server.io.model;
 
 public class FeeEntity {
-	int userId;
-	int fee;
+	private int userId;
+	private int fee;
 
 	public FeeEntity () {
 
@@ -12,4 +12,21 @@ public class FeeEntity {
 		this.userId = userId;
 		this.fee = fee;
 	}
+
+	public int getUserId() {
+		return userId;
+	}
+
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
+
+	public int getFee() {
+		return fee;
+	}
+
+	public void setFee(int fee) {
+		this.fee = fee;
+	}
+
 }

@@ -3,6 +3,7 @@ package server.io.model;
 import org.junit.Test;
 
 import static lib.Assert.assertDoesNotThrow;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 public class FeeEntityTests implements GenericModelTest {
@@ -23,5 +24,8 @@ public class FeeEntityTests implements GenericModelTest {
 
         feeEntity.setUserId(userId);
         feeEntity.setFee(fee);
+
+        assertEquals(feeEntity.getUserId(), userId);
+        assertEquals(feeEntity.getFee(), fee);
     }
 }
