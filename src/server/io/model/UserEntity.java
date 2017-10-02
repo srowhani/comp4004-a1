@@ -1,11 +1,11 @@
 package server.io.model;
 
-public class User {
+public class UserEntity {
 	private int id;
 	private String username;
 	private String password;
 	
-	public User(int id, String username, String password) {
+	public UserEntity(int id, String username, String password) {
 		this.id = id;
 		this.password = password;
 		this.username = username;

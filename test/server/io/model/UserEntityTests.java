@@ -5,11 +5,11 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-public class UserModelTests {
+public class UserEntityTests {
 
     @Test
     public void canInstantiate () {
-        assertNotNull(new User(1, "username", "password"));
+        assertNotNull(new UserEntity(1, "username", "password"));
     }
 
     @Test
@@ -17,11 +17,11 @@ public class UserModelTests {
         int userId = 1;
         String username = "testuser";
         String password = "password";
-        User testUser = new User(userId, username, password);
+        UserEntity testUserEntity = new UserEntity(userId, username, password);
 
-        assertEquals(testUser.getId(), userId);
-        assertEquals(testUser.getUsername(), username);
-        assertEquals(testUser.getPassword(), password);
+        assertEquals(testUserEntity.getId(), userId);
+        assertEquals(testUserEntity.getUsername(), username);
+        assertEquals(testUserEntity.getPassword(), password);
 
     }
 }
