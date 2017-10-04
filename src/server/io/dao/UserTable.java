@@ -1,4 +1,4 @@
-package server.io.tables;
+package server.io.dao;
 
 import org.apache.log4j.Logger;
 import server.io.model.UserEntity;
@@ -7,7 +7,6 @@ import util.Trace;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.function.Predicate;
 
 public class UserTable {
@@ -23,8 +22,7 @@ public class UserTable {
     private static class UserListHolder {
         private static final UserTable INSTANCE = new UserTable();
     }
-
-
+    
     private UserTable() {
 		String[] passwordList = new String[]{"Zhibo","Yu","Michelle","Kevin","Sun"};
     	String[] usernameList = new String[]{"Zhibo@carleton.ca","Yu@carleton.ca","Michelle@carleton.ca","Kevin@carleton.ca","Sun@carleton.ca"};

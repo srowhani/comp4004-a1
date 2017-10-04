@@ -1,9 +1,8 @@
-package server.io.tables;
+package server.io.dao;
 
 import org.junit.Test;
 import server.io.model.UserEntity;
 
-import java.util.Arrays;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -12,7 +11,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-public class UserTableTest {
+public class UserTableTests {
     @Test
     public void getInstanceNonNull () {
         assertDoesNotThrow(() -> UserTable.getInstance());
