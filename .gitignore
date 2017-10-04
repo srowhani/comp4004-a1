@@ -6,3 +6,6 @@
 
 # Class files
 *.class
+
+# Output
+out/**
