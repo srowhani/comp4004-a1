@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.Optional;
 
 import static junit.framework.TestCase.assertNotNull;
-import static junit.framework.TestCase.fail;
+import static junit.framework.TestCase.assertTrue;
 import static lib.Assert.assertDoesNotThrow;
 
 public class LoanTableTests {
@@ -29,5 +29,6 @@ public class LoanTableTests {
         createLoan();
         Optional<LoanEntity> loanEntityOptional = loanTable.lookup(
                 loan -> loan.getISBN().equals(testLoan.getISBN()));
+        assertTrue(loanEntityOptional.isPresent());
     }
 }
