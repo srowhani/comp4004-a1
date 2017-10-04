@@ -1,6 +1,5 @@
 package server.io.tables;
 
-import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion;
 import org.apache.log4j.Logger;
 import server.io.model.UserEntity;
 import util.Trace;
@@ -8,11 +7,13 @@ import util.Trace;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
+import java.util.function.Predicate;
 
 public class UserTable {
 	private final Logger logger = Trace.getInstance().getLogger("operation_file");
 	private List<UserEntity> userList = new ArrayList<>();
-
+    private int numUsers = 0;
 	public static final int
 			USER_AUTHENTICATED = 0,
 			INVALID_CREDENTIALS = 1,
@@ -29,7 +30,7 @@ public class UserTable {
     	String[] usernameList = new String[]{"Zhibo@carleton.ca","Yu@carleton.ca","Michelle@carleton.ca","Kevin@carleton.ca","Sun@carleton.ca"};
 
     	for(int i=0; i < usernameList.length; i++){
-			userList.add(new UserEntity(i, usernameList[i], passwordList[i]));
+			add(usernameList[i], passwordList[i]);
 		}
     	logger.info(String.format("Operation:Initialize UserTable;UserTable: %s", userList));
     };
@@ -38,46 +39,31 @@ public class UserTable {
         return UserListHolder.INSTANCE;
     }
 
-    public boolean createUser(String username, String password) {
-    	boolean result;
-		int flag = 0;
+    public UserEntity add(String username, String password) {
+        if (userList.stream().anyMatch(user -> user.getUsername().equals(username))) {
+            logger.info(String.format("Operation:Create New User;User Info:[%s,%s];State:Fail;Reason:The User already existed.", username, password));
+            return null;
+        }
+        UserEntity userEntity = new UserEntity(numUsers++, username, password);
 
-		for(int i = 0; i < userList.size(); i++){
-			String email = userList.get(i).getUsername();
-			if(email.equalsIgnoreCase(username)) {
-				flag += 1;
-			}
-		}
+        userList.add(userEntity);
+        logger.info(String.format("Operation:Create New User;User Info:[%s,%s];State:Success", username, password));
 
-		if(flag == 0){
-			logger.info(String.format("Operation:Create New User;User Info:[%s,%s];State:Success", username, password));
-			UserEntity userEntity = new UserEntity(userList.size(), username, password);
-
-			return userList.add(userEntity);
-		}
-		logger.info(String.format("Operation:Create New User;User Info:[%s,%s];State:Fail;Reason:The User already existed.", username, password));
-		return false;
+        return userEntity;
 	}
 
-	public Optional<UserEntity> lookup(int id) {
+	public Optional<UserEntity> lookup(Predicate<UserEntity> predicate) {
 		return userList
-				.stream()
-				.filter(user -> user.getId() == id)
-				.findFirst();
-	}
-
-	public Optional<UserEntity> lookup(String username) {
-		return userList
-				.stream()
-				.filter(user -> user.getUsername().equals(username))
-				.findFirst();
+            .stream()
+            .filter(predicate)
+            .findFirst();
 	}
 
 	public List<UserEntity> getUserTable() {
 		return userList;
 	}
 
-	public int checkUser(String username, String password) {
+	public int validateUser(String username, String password) {
 		Optional<UserEntity> optionalUser = userList
 				.stream()
 				.filter(user -> user.getUsername().equals(username))
@@ -93,47 +79,17 @@ public class UserTable {
 
 		return INVALID_CREDENTIALS;
 	}
-//	public Object delete(int i) {
-//		//Since the userid in "User Creation" is automatically assigned to the user,upon its creation.
-//		//Each user has a unique userid.Even it is deleted,its userid can not be assigned to other user.
-//		//To maintain the correctness of the data,here instead delete index from the List.
-//		//I choose to remove the user's information instead the whole index.Keep its userid as reference.
-//		String result="";
-//		boolean loan=LoanTable.getInstance().checkUser(i);
-//		int flag=0;
-//		int index=0;
-//		for(int j=0;j<userList.size();j++){
-//			if(userList.get(j).getId()==i){
-//				index=j;
-//				flag=flag+1;
-//			}else{
-//				flag=flag+0;
-//			}
-//		}
-//
-//		if(flag==0){
-//			result="The User Does Not Exist";
-//			logger.info(String.format("Operation:Delete User;User Info:[%s,%s];State:Fail;Reason:The User Does Not Exist.", "N/A","N/A"));
-//		}else{
-//			boolean fee=FeeTable.getInstance().lookup(i);
-//			String string=userList.get(index).getUsername();
-//			String string2=userList.get(index).getPassword();
-//			if(fee && loan){
-//				userList.get(index).setId(i);
-//				userList.get(index).setPassword("N/A");
-//				userList.get(index).setUsername("N/A");
-//				result="success";
-//				logger.info(String.format("Operation:Delete User;User Info:[%s,%s];State:Success", string,string2));
-//			}else if(fee==false){
-//				result="Outstanding Fee Exists";
-//				logger.info(String.format("Operation:Delete User;User Info:[%s,%s];State:Fail;Reason:Outstanding Fee Exists.", string,string2));
-//			}else if(loan==false){
-//				result="Active Loan Exists";
-//				logger.info(String.format("Operation:Delete User;User Info:[%s,%s];State:Fail;Reason:Active Loan Exists.", string,string2));
-//			}
-//		}
-//
-//		return result;
-//
-//	}
+	public UserEntity remove(int id) {
+        Optional<UserEntity> user = userList
+            .stream()
+            .filter(userEntity -> userEntity.getId() == id)
+            .findFirst();
+
+        if (!user.isPresent()) {
+            return null;
+        }
+
+        userList.remove(user.get());
+        return user.get();
+	}
 }

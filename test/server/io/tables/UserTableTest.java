@@ -3,6 +3,10 @@ package server.io.tables;
 import org.junit.Test;
 import server.io.model.UserEntity;
 
+import java.util.Arrays;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 import static lib.Assert.assertDoesNotThrow;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -19,15 +23,27 @@ public class UserTableTest {
         UserTable userTable = UserTable.getInstance();
         String username = "username";
         String password = "password";
-        userTable.createUser(username, password);
+        userTable.add(username, password);
+
         assertTrue(userTable.getUserTable().stream().anyMatch(item ->
             item.getUsername().equals(username) && item.getPassword().equals(password)
         ));
+
     }
 
     @Test
     public void deleteUser () {
-        fail("Not yet implemented :(");
+        UserTable userTable = UserTable.getInstance();
+
+        userTable.getUserTable()
+                .stream()
+                .map(u -> u.getId())
+                .collect(Collectors.toList())
+                .forEach(id -> {
+                    userTable.remove(id);
+                });
+
+        assertEquals(userTable.getUserTable().size(), 0);
     }
 
     @Test
@@ -36,9 +52,13 @@ public class UserTableTest {
 
         UserTable userTable = UserTable.getInstance();
         UserEntity userEntity = userTable.getUserTable().get(0);
-        assertEquals(userTable.lookup(userEntity.getId()).get(), userEntity);
-        assertEquals(userTable.lookup(userEntity.getUsername()).get(), userEntity);
 
+        Optional<UserEntity> userEntityOptional = userTable.lookup(user -> user.getId() == userEntity.getId());
+        assertTrue(userEntityOptional.isPresent());
+        assertEquals(userEntityOptional.get(), userEntity);
+
+        userEntityOptional = userTable.lookup(user -> user.getUsername() == userEntity.getUsername());
+        assertTrue(userEntityOptional.isPresent());
+        assertEquals(userEntityOptional.get(), userEntity);
     }
-
 }
