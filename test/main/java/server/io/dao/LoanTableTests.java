@@ -12,6 +12,7 @@ import static lib.Assert.assertDoesNotThrow;
 
 public class LoanTableTests {
     LoanEntity testLoan;
+
     @Test
     public void getInstanceNonNull () {
         assertDoesNotThrow(() -> LoanTable.getInstance());
