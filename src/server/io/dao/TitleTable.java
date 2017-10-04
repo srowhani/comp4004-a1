@@ -29,26 +29,17 @@ public class TitleTable {
         return TitleListHolder.INSTANCE;
     }
 
-    public Object createTitle(String string, String string2) {
-		boolean result=true;
+    public TitleEntity createTitle(String isbn, String bookTitle) {
 		int flag=0;
-		for(int i=0;i<titleList.size();i++){
-			String ISBN=(titleList.get(i)).getISBN();
-			if(ISBN.equalsIgnoreCase(string)){
-				flag=flag+1;
-			}else{
-				flag=flag+0;	
-			}
+		if (titleList.stream().anyMatch(title -> title.getISBN().equals(isbn))) {
+			logger.info(String.format("Operation:Create New Title;Title Info:[%s,%s];State:Fail;Reason:The ISBN already existed.", isbn, bookTitle));
+			return null;
 		}
-		if(flag==0){
-			TitleEntity newtitle=new TitleEntity(string,string2);
-			result=titleList.add(newtitle);
-			logger.info(String.format("Operation:Create New Title;Title Info:[%s,%s];State:Success", string,string2));
-		}else{
-			result=false;
-			logger.info(String.format("Operation:Create New Title;Title Info:[%s,%s];State:Fail;Reason:The ISBN already existed.", string,string2));
-		}
-		return result;	
+
+		TitleEntity titleEntity = new TitleEntity(isbn, bookTitle);
+		titleList.add(titleEntity);
+		logger.info(String.format("Operation:Create New Title;Title Info:[%s,%s];State:Success", isbn, bookTitle));
+		return titleEntity;
 	}
 
 	public Optional<TitleEntity> lookup(Predicate<TitleEntity> predicate) {

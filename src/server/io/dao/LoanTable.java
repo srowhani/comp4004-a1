@@ -2,6 +2,8 @@ package server.io.dao;
 
 import org.apache.log4j.Logger;
 import server.io.model.LoanEntity;
+import server.io.model.TitleEntity;
+import server.io.model.UserEntity;
 import util.Trace;
 
 import java.util.ArrayList;
@@ -35,8 +37,20 @@ public class LoanTable {
 			.filter(loanEntityPredicate)
 			.findFirst();
 	}
-	public Object createLoan(int i, String string, String string2, Date date) {
-		return null;
+	public LoanEntity createLoan(int userId, String titleISBN, String copyNumber, Date date) {
+        Optional<UserEntity> userEntity = UserTable.getInstance()
+                .lookup(user -> user.getId() == userId);
+        Optional<TitleEntity> titleEntity = TitleTable.getInstance()
+                .lookup(title -> title.getISBN().equals(titleISBN));
+        // boolean copynumber = ItemTable.getInstance().lookup(titleISBN, copyNumber);
+
+        // TODO: Implement pulling of data from other tables
+        // TODO: Possible refactor accessing DAO from Repository layer
+
+
+        LoanEntity loanEntity = new LoanEntity(userId, titleISBN, copyNumber, date, "0");
+        loanList.add(loanEntity);
+        return loanEntity;
 	}
 
 	public boolean checkLimit(int j) {
