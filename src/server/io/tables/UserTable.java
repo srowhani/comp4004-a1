@@ -7,19 +7,25 @@ import util.Trace;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class UserTable {
-	private Logger logger = Trace.getInstance().getLogger("operation_file");
-	List<UserEntity> userList = new ArrayList<UserEntity>();
+	private final Logger logger = Trace.getInstance().getLogger("operation_file");
+	private List<UserEntity> userList = new ArrayList<>();
+
+	public static final int
+			USER_AUTHENTICATED = 0,
+			INVALID_CREDENTIALS = 1,
+			NO_USER_FOUND = 2;
+
 
     private static class UserListHolder {
         private static final UserTable INSTANCE = new UserTable();
     }
 
-    private UserTable() {
 
-    	//set up the default list with some instances
-    	String[] passwordList = new String[]{"Zhibo","Yu","Michelle","Kevin","Sun"};
+    private UserTable() {
+		String[] passwordList = new String[]{"Zhibo","Yu","Michelle","Kevin","Sun"};
     	String[] usernameList = new String[]{"Zhibo@carleton.ca","Yu@carleton.ca","Michelle@carleton.ca","Kevin@carleton.ca","Sun@carleton.ca"};
 
     	for(int i=0; i < usernameList.length; i++){
@@ -32,44 +38,60 @@ public class UserTable {
         return UserListHolder.INSTANCE;
     }
 
-    public boolean createUser(String string, String string2) {
+    public boolean createUser(String username, String password) {
     	boolean result;
 		int flag = 0;
 
 		for(int i = 0; i < userList.size(); i++){
 			String email = userList.get(i).getUsername();
-			if(email.equalsIgnoreCase(string)) {
+			if(email.equalsIgnoreCase(username)) {
 				flag += 1;
 			}
 		}
 
 		if(flag == 0){
-			logger.info(String.format("Operation:Create New User;User Info:[%s,%s];State:Success", string,string2));
-			UserEntity userEntity = new UserEntity(userList.size(),string,string2);
+			logger.info(String.format("Operation:Create New User;User Info:[%s,%s];State:Success", username, password));
+			UserEntity userEntity = new UserEntity(userList.size(), username, password);
 
 			return userList.add(userEntity);
 		}
-		logger.info(String.format("Operation:Create New User;User Info:[%s,%s];State:Fail;Reason:The User already existed.", string,string2));
+		logger.info(String.format("Operation:Create New User;User Info:[%s,%s];State:Fail;Reason:The User already existed.", username, password));
 		return false;
 	}
-	public boolean lookup(int j) {
-		boolean result=true;
-		int flag=0;
-		for(int i=0;i<userList.size();i++){
-			int userid=(userList.get(i)).getId();
-			if(userid==j){
-				flag=flag+1;
-			}else{
-				flag=flag+0;	
-			}
-		}
-		if(flag==0){
-			result=false;
-		}
-		return result;
+
+	public Optional<UserEntity> lookup(int id) {
+		return userList
+				.stream()
+				.filter(user -> user.getId() == id)
+				.findFirst();
 	}
+
+	public Optional<UserEntity> lookup(String username) {
+		return userList
+				.stream()
+				.filter(user -> user.getUsername().equals(username))
+				.findFirst();
+	}
+
 	public List<UserEntity> getUserTable() {
 		return userList;
+	}
+
+	public int checkUser(String username, String password) {
+		Optional<UserEntity> optionalUser = userList
+				.stream()
+				.filter(user -> user.getUsername().equals(username))
+				.findFirst();
+
+		if (!optionalUser.isPresent()) {
+			return NO_USER_FOUND;
+		}
+
+		if (optionalUser.get().getPassword().equals(password)) {
+			return USER_AUTHENTICATED;
+		}
+
+		return INVALID_CREDENTIALS;
 	}
 //	public Object delete(int i) {
 //		//Since the userid in "User Creation" is automatically assigned to the user,upon its creation.
@@ -114,34 +136,4 @@ public class UserTable {
 //		return result;
 //
 //	}
-	public int lookup(String string) {
-		int userid=-1;
-		for(int i=0;i<userList.size();i++){
-			if(userList.get(i).getUsername().equalsIgnoreCase(string)){
-				userid=i;
-			}
-		}
-		return userid;
-	}
-	public int checkUser(String string, String string2) {
-		int result=0;
-		int flag=0;
-		int index=0;
-		for(int i=0;i<userList.size();i++){
-			if(userList.get(i).getUsername().equalsIgnoreCase(string)){
-				flag=flag+1;
-				index=i;
-			}else{
-				flag=flag+0;
-			}
-		}
-		boolean password=userList.get(index).getPassword().equalsIgnoreCase(string2);
-		if(flag!=0 && password){
-			result=0;
-		}else if(flag==0){
-			result=2;
-		}else if(password==false){
-			result=1;
-		}
-		return result;
-	}}
+}
