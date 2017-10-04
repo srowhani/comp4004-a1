@@ -19,7 +19,7 @@ public class TitleTable {
     	//set up the default list with some instances
     	String[] ISBNList=new String[]{"9781442668584","9781442616899","9781442667181","9781611687910","9781317594277"};
     	String[] titlenameList=new String[]{"By the grace of God","Dante's lyric poetry ","Courtesy lost","Writing for justice","The act in context"};
-    	for(int i=0;i<ISBNList.length;i++){
+    	for(int i=0 ;i < ISBNList.length; i++){
 			TitleEntity detitle=new TitleEntity(ISBNList[i],titlenameList[i]);
     		titleList.add(detitle);
 		}

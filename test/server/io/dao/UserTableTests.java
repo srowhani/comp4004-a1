@@ -38,9 +38,7 @@ public class UserTableTests {
                 .stream()
                 .map(u -> u.getId())
                 .collect(Collectors.toList())
-                .forEach(id -> {
-                    userTable.remove(id);
-                });
+                .forEach(id -> userTable.remove(id));
 
         assertEquals(userTable.getUserTable().size(), 0);
     }

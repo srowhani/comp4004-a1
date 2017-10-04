@@ -45,18 +45,17 @@ public class TitleTableTests {
 
     @Test
     public void lookupRetrievesOptional () {
-        fail("Implement this :(");
-//        createUser();
-//
-//        UserTable userTable = UserTable.getInstance();
-//        UserEntity userEntity = userTable.getUserTable().get(0);
-//
-//        Optional<UserEntity> userEntityOptional = userTable.lookup(user -> user.getId() == userEntity.getId());
-//        assertTrue(userEntityOptional.isPresent());
-//        assertEquals(userEntityOptional.get(), userEntity);
-//
-//        userEntityOptional = userTable.lookup(user -> user.getUsername() == userEntity.getUsername());
-//        assertTrue(userEntityOptional.isPresent());
-//        assertEquals(userEntityOptional.get(), userEntity);
+        createTitle();
+        TitleTable titleTable = TitleTable.getInstance();
+
+        TitleEntity titleEntity = titleTable.getTitleTable().get(0);
+
+        Optional<TitleEntity> titleEntityOptional = titleTable.lookup(title -> title.getISBN() == titleEntity.getISBN());
+        assertTrue(titleEntityOptional.isPresent());
+        assertEquals(titleEntityOptional.get(), titleEntity);
+
+        titleEntityOptional = titleTable.lookup(title -> title.getBooktitle() == titleEntity.getBooktitle());
+        assertTrue(titleEntityOptional.isPresent());
+        assertEquals(titleEntityOptional.get(), titleEntity);
     }
 }
