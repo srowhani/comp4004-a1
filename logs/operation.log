@@ -1,9 +1,0 @@
-2017-10-04 16:50:13 INFO  String:27 - Operation:Initialize LoanTable;LoanTable: [[0, 9781442668584, 1, 2017-10-04 04:50:13, 0]]
-@2017-10-04 16:50:13 INFO  String:48 - Operation:Create New User;User Info:[Zhibo@carleton.ca,Zhibo];State:Success
-@2017-10-04 16:50:13 INFO  String:48 - Operation:Create New User;User Info:[Yu@carleton.ca,Yu];State:Success
-@2017-10-04 16:50:13 INFO  String:48 - Operation:Create New User;User Info:[Michelle@carleton.ca,Michelle];State:Success
-@2017-10-04 16:50:13 INFO  String:48 - Operation:Create New User;User Info:[Kevin@carleton.ca,Kevin];State:Success
-@2017-10-04 16:50:13 INFO  String:48 - Operation:Create New User;User Info:[Sun@carleton.ca,Sun];State:Success
-@2017-10-04 16:50:13 INFO  String:33 - Operation:Initialize UserTable;UserTable: [[0, Zhibo@carleton.ca, Zhibo], [1, Yu@carleton.ca, Yu], [2, Michelle@carleton.ca, Michelle], [3, Kevin@carleton.ca, Kevin], [4, Sun@carleton.ca, Sun]]
-@2017-10-04 16:50:13 INFO  String:26 - Operation:Initialize TitleTable;TitleTable: [[9781442668584,By the grace of God], [9781442616899,Dante's lyric poetry ], [9781442667181,Courtesy lost], [9781611687910,Writing for justice], [9781317594277,The act in context]]
-@
