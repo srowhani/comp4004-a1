@@ -1,5 +1,7 @@
 package main.java.server.io.dao;
 
+import main.java.server.io.error.ItemEntityNotFoundException;
+import main.java.server.io.error.LoanExistsException;
 import main.java.server.io.model.ItemEntity;
 import org.junit.Test;
 
@@ -36,7 +38,24 @@ public class ItemTableTests {
         ItemTable itemTable = ItemTable.getInstance();
         ItemEntity itemEntity = itemTable.getItemTable().get(0);
         itemTable.deleteAll(itemEntity.getISBN());
-        // TODO: Implement this feature
         assertTrue(itemTable.getItemTable().stream().noneMatch(item -> item.getISBN().equals(itemEntity.getISBN())));
+    }
+
+    @Test
+    public void deleteItem () {
+        addItemAndPerformLookup();
+
+        ItemTable itemTable = ItemTable.getInstance();
+        ItemEntity itemEntity = itemTable.getItemTable().get(0);
+
+        try {
+            itemTable.delete(itemEntity.getISBN(), itemEntity.getCopyNumber());
+        } catch (ItemEntityNotFoundException e) {
+            e.printStackTrace();
+        } catch (LoanExistsException e) {
+            e.printStackTrace();
+        }
+
+        assertTrue(!itemTable.lookup(item -> item.getISBN().equals(itemEntity.getISBN())).isPresent());
     }
 }

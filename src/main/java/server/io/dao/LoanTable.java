@@ -77,11 +77,14 @@ public class LoanTable {
 		return false;
 	}
 
-	public boolean checkLoan(String string, String string2) {
-		return false;
-	}
+    /**
+     * If loan matches given predicate, return false
+     * @param loanEntityPredicate
+     * @return
+     */
+	public boolean checkLoan(Predicate<LoanEntity> loanEntityPredicate) {
+        boolean loanExists = loanList.stream().anyMatch(loanEntityPredicate);
 
-	public boolean checkLoan(String string) {
-		return false;
+        return loanExists;
 	}
 }
