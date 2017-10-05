@@ -21,7 +21,7 @@ public class UserTable {
     }
     
     private UserTable() {
-		String[] passwordList = new String[]{"Zhibo","Yu","Michelle","Kevin","Sun"};
+		String[] passwordList = new String[]{"Zhix bo","Yu","Michelle","Kevin","Sun"};
     	String[] usernameList = new String[]{"Zhibo@carleton.ca","Yu@carleton.ca","Michelle@carleton.ca","Kevin@carleton.ca","Sun@carleton.ca"};
 
     	for(int i=0; i < usernameList.length; i++){
