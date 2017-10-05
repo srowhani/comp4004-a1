@@ -18,7 +18,7 @@ public class FeeTable {
     }
     private FeeTable(){
     	//set up the default list with some instances
-		FeeEntity fee=new Fee(0,5);
+		FeeEntity fee=new FeeEntity(0,5);
     	feeList.add(fee);
     	Initialization();
     };

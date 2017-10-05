@@ -1,5 +1,7 @@
 package main.java.server.io.dao;
 
+import main.java.server.io.error.InvalidUserCredentialsException;
+import main.java.server.io.error.UserEntityNotFoundException;
 import org.apache.log4j.Logger;
 import main.java.server.io.model.UserEntity;
 import main.java.util.Trace;
@@ -13,11 +15,6 @@ public class UserTable {
 	private final Logger logger = Trace.getInstance().getLogger("operation_file");
 	private List<UserEntity> userList = new ArrayList<>();
     private int numUsers = 0;
-	public static final int
-			USER_AUTHENTICATED = 0,
-			INVALID_CREDENTIALS = 1,
-			NO_USER_FOUND = 2;
-
 
     private static class UserListHolder {
         private static final UserTable INSTANCE = new UserTable();
@@ -61,21 +58,19 @@ public class UserTable {
 		return userList;
 	}
 
-	public int validateUser(String username, String password) {
+	public void validate(String username, String password) throws InvalidUserCredentialsException, UserEntityNotFoundException {
 		Optional<UserEntity> optionalUser = userList
 				.stream()
 				.filter(user -> user.getUsername().equals(username))
 				.findFirst();
 
 		if (!optionalUser.isPresent()) {
-			return NO_USER_FOUND;
+			throw new UserEntityNotFoundException();
 		}
 
-		if (optionalUser.get().getPassword().equals(password)) {
-			return USER_AUTHENTICATED;
+		if (!optionalUser.get().getPassword().equals(password)) {
+			throw new InvalidUserCredentialsException();
 		}
-
-		return INVALID_CREDENTIALS;
 	}
 	public UserEntity remove(int id) {
         Optional<UserEntity> user = userList
