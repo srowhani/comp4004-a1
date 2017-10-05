@@ -1,11 +1,29 @@
 package main.java.server.io.dao;
 
+import main.java.server.io.model.UserEntity;
+import main.java.util.Config;
+import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Date;
+import java.util.Optional;
+
+import static junit.framework.TestCase.assertTrue;
 import static lib.Assert.assertDoesNotThrow;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 public class FeeTableTests {
+    FeeTable feeTable;
+
+
+    @Before
+    public void setup () {
+        feeTable = FeeTable.getInstance();
+        feeTable.getFeeTable().clear();
+
+    }
+
     @Test
     public void instantiateInstance () {
         assertDoesNotThrow(() -> FeeTable.getInstance());
@@ -13,7 +31,11 @@ public class FeeTableTests {
 
     @Test
     public void lookupExistingItemReturnsPresentOptional () {
-        fail("Not yet implemented");
+        Optional<UserEntity> existingUser = UserTable.getInstance().getUserTable().stream().findAny();
+
+        if (existingUser.isPresent()) {
+
+        }
     }
 
     @Test
@@ -33,7 +55,16 @@ public class FeeTableTests {
 
     @Test
     public void applyFeeAddsFeeToUserCorrectly () {
-        fail("Not yet implemented");
+
+        Optional<UserEntity> existingUser = UserTable.getInstance().getUserTable().stream().findAny();
+
+        assertTrue(existingUser.isPresent());
+        int daysOverDue = 3;
+
+        int id = existingUser.get().getId();
+        feeTable.applyFee(id, Config.SIMULATED_DAY * (Config.OVERDUE + daysOverDue));
+
+        assertEquals(daysOverDue, feeTable.lookupfee(id));
     }
 
     @Test

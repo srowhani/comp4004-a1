@@ -56,7 +56,7 @@ public class FeeTable {
 		}
 		return result;
 	}
-	public Object lookupfee(int j) {
+	public int lookupfee(int j) {
 		int fee=0;
 		boolean user=FeeTable.getInstance().checkuser(j);
 		if(user){
@@ -81,26 +81,26 @@ public class FeeTable {
 				index=i;
 			}
 		}
-		int numberOfDaysOverdue = (int) ((time/(Config.STIMULATED_DAY))-Config.OVERDUE);
+		int numberOfDaysOverdue = (int) ((time/(Config.SIMULATED_DAY))-Config.OVERDUE);
 		if(flag!=0) {
 			if(numberOfDaysOverdue >= 0){
 				feeList.get(index).setFee(numberOfDaysOverdue + feeList.get(index).getFee());
 				feeList.get(index).setUserId(id);
-				logger.info(String.format("Operation:Apply OutStanding Fee;Fee Info:[%d,%d];State:Success", j,a+feeList.get(index).getFee()));
+				logger.info(String.format("Operation:Apply OutStanding Fee;Fee Info:[%d,%d];State:Success", id, numberOfDaysOverdue + feeList.get(index).getFee()));
 			}else{
-				feeList.get(index).setFee(feeList.get(index).getFee());
-				feeList.get(index).setUserId(id);
-				logger.info(String.format("Operation:Apply OutStanding Fee;Fee Info:[%d,%d];State:Success", j,a+feeList.get(index).getFee()));
-			}
+                feeList.get(index).setFee(feeList.get(index).getFee());
+                feeList.get(index).setUserId(id);
+                logger.info(String.format("Operation:Apply OutStanding Fee;Fee Info:[%d,%d];State:Success", id,numberOfDaysOverdue + feeList.get(index).getFee()));
+            }
 		} else {
 			if(numberOfDaysOverdue >= 0){
 				FeeEntity fee=new FeeEntity(id, numberOfDaysOverdue);
 				feeList.add(fee);
-				logger.info(String.format("Operation:Apply OutStanding Fee;Fee Info:[%d,%d];State:Success", j,a));
+				logger.info(String.format("Operation:Apply OutStanding Fee;Fee Info:[%d,%d];State:Success", id, numberOfDaysOverdue));
 			}else{
 				FeeEntity fee=new FeeEntity(id,0);
 				feeList.add(fee);
-				logger.info(String.format("Operation:Apply OutStanding Fee;Fee Info:[%d,%d];State:Success", j,0));
+				logger.info(String.format("Operation:Apply OutStanding Fee;Fee Info:[%d,%d];State:Success", id,0));
 			}
 		}
 		
@@ -130,7 +130,7 @@ public class FeeTable {
 		}
 		if(oloan==false){
 			result="Borrowing Items Exist";
-			logger.info(String.format("Operation:Pay Fine;Fee Info:[%d,%d];State:Fail;Reason:Borrowing Items Exist.", i,fee));
+			logger.info(String.format("Operation:Pay Fine;Fee Info:[%d,%d];State:Fail;Reason:Borrowing Items Exist.", id, fee));
 		}else{
 			feeList.get(index).setFee(0);
 			result="success";
