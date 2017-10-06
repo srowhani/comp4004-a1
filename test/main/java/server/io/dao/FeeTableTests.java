@@ -11,6 +11,7 @@ import java.util.Optional;
 import static junit.framework.TestCase.assertTrue;
 import static lib.Assert.assertDoesNotThrow;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
 public class FeeTableTests {
@@ -32,25 +33,16 @@ public class FeeTableTests {
     @Test
     public void lookupExistingItemReturnsPresentOptional () {
         Optional<UserEntity> existingUser = UserTable.getInstance().getUserTable().stream().findAny();
+        assertTrue(existingUser.isPresent());
+        int daysOverDue = 3;
+        feeTable.applyFee(existingUser.get().getId(), Config.SIMULATED_DAY * (Config.OVERDUE + daysOverDue) );
 
-        if (existingUser.isPresent()) {
-
-        }
+        assertTrue(feeTable.lookup(feeEntity -> feeEntity.getFee() == daysOverDue).isPresent());
     }
 
     @Test
     public void lookupExistingItemReturnsEmptyOptional () {
-        fail("Not yet implemented");
-    }
-
-    @Test
-    public void checkUserAssertsUserHasNoFees () {
-        fail("Not yet implemented");
-    }
-
-    @Test
-    public void lookupFeeReturnsCorrectAmountOwedByUserEntity () {
-        fail("Not yet implemented");
+        assertNotNull(feeTable.lookup(item -> false));
     }
 
     @Test

@@ -71,12 +71,12 @@ public class LoanTable {
 
 	/**
 	 * Verify user has no outstanding loans
-	 * If user has a loan, return false (indicating they cant pay)
+	 * If user has a loan, return true (indicating they cant pay)
 	 * Else return true
 	 * @param userId
 	 */
 	public boolean checkLoanByUserId(int userId) {
-    	return loanList.stream().noneMatch(loanEntity -> loanEntity.getUserId() == userId);
+    	return loanList.stream().anyMatch(loanEntity -> loanEntity.getUserId() == userId);
 	}
 
     /**
