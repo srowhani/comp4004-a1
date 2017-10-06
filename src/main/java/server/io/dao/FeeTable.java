@@ -106,15 +106,15 @@ public class FeeTable {
 		return feeList;
 	}
 
-	public Object payFine(int id) {
+	public Object payFine(int userId) {
 		String result="";
-		boolean oloan=LoanTable.getInstance().lookLimit(id);
+		boolean oloan = LoanTable.getInstance().checkLoanByUserId(userId);
 		int fee=0;
 		int index=0;
-		boolean user=FeeTable.getInstance().checkuser(id);
+		boolean user=FeeTable.getInstance().checkuser(userId);
 		if(user){
 			for(int m=0;m<feeList.size();m++){
-				if(feeList.get(m).getUserId()==id){
+				if(feeList.get(m).getUserId() ==userId){
 					fee=feeList.get(m).getFee();
 					index=m;
 				}else{
@@ -124,13 +124,13 @@ public class FeeTable {
 		}else{
 			fee=0;
 		}
-		if(oloan==false){
+		if(oloan == false){
 			result="Borrowing Items Exist";
-			logger.info(String.format("Operation:Pay Fine;Fee Info:[%d,%d];State:Fail;Reason:Borrowing Items Exist.", id, fee));
+			logger.info(String.format("Operation:Pay Fine;Fee Info:[%d,%d];State:Fail;Reason:Borrowing Items Exist.", userId, fee));
 		}else{
 			feeList.get(index).setFee(0);
 			result="success";
-			logger.info(String.format("Operation:Pay Fine;Fee Info:[%d,%d];State:Success", id,fee));
+			logger.info(String.format("Operation:Pay Fine;Fee Info:[%d,%d];State:Success", userId, fee));
 		}
 		return result;
 	}
