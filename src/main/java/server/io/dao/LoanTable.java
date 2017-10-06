@@ -70,7 +70,7 @@ public class LoanTable {
 	}
 
 	public boolean lookLimit(int j) {
-		return false;
+		return true;
 	}
 
 	public boolean checkUser(int j) {

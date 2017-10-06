@@ -56,20 +56,16 @@ public class FeeTable {
 		}
 		return result;
 	}
-	public int lookupfee(int j) {
+	public int lookupFee(int userId) {
 		int fee=0;
-		boolean user=FeeTable.getInstance().checkuser(j);
-		if(user){
-		for(int i=0;i<feeList.size();i++){
-			int userid=(feeList.get(i)).getUserId();
-			if(userid==j){
-				fee=fee+feeList.get(i).getFee();
-			}
-		}
-		}else{
-			fee=0;
-		}
-		return fee;
+
+		int amountToPay = feeList
+            .stream()
+            .filter(feeEntity -> feeEntity.getUserId() == userId)
+            .mapToInt(feeEntity -> feeEntity.getFee())
+            .sum();
+
+        return amountToPay;
 	}
 	public void applyFee(int id, long time) {
 		int flag=0;

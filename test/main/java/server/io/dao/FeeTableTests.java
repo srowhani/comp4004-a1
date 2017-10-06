@@ -56,7 +56,7 @@ public class FeeTableTests {
     @Test
     public void applyFeeAddsFeeToUserCorrectly () {
 
-        Optional<UserEntity> existingUser = UserTable.getInstance().getUserTable().stream().findAny();
+        Optional<UserEntity> existingUser = UserTable.getInstance().getUserTable().stream().findFirst();
 
         assertTrue(existingUser.isPresent());
         int daysOverDue = 3;
@@ -64,11 +64,20 @@ public class FeeTableTests {
         int id = existingUser.get().getId();
         feeTable.applyFee(id, Config.SIMULATED_DAY * (Config.OVERDUE + daysOverDue));
 
-        assertEquals(daysOverDue, feeTable.lookupfee(id));
+        assertEquals(daysOverDue, feeTable.lookupFee(id));
     }
 
     @Test
     public void payFineAdjustsAmountOwedCorrectly () {
-        fail("Not yet impl");
+        Optional<UserEntity> existingUser = UserTable.getInstance().getUserTable().stream().findFirst();
+        assertTrue(existingUser.isPresent());
+
+        applyFeeAddsFeeToUserCorrectly();
+
+        feeTable.payFine(existingUser.get().getId());
+
+        assertEquals(0, feeTable.lookupFee(existingUser.get().getId()));
+        assertEquals(0, feeTable.lookupFee(123));
+
     }
 }
