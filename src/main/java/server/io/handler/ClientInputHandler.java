@@ -1,9 +1,14 @@
 package main.java.server.io.handler;
 
 import main.java.server.io.dao.UserTable;
+import main.java.server.io.error.LoanExistsException;
+import main.java.server.io.error.OutstandingFeeExistsException;
+import main.java.server.io.error.UserEntityNotFoundException;
 import main.java.server.io.handler.model.ClientState;
 import main.java.server.io.handler.model.ServerOutput;
 import main.java.server.io.model.UserEntity;
+
+import java.util.Optional;
 
 import static main.java.server.io.handler.model.ClientState.CLERK;
 import static main.java.server.io.handler.model.ClientState.CREATEUSER;
@@ -44,8 +49,23 @@ public class ClientInputHandler {
         return null;
     }
 
-    public ServerOutput deleteUser(String input) {
-        return null;
+    public ServerOutput deleteUser(String username) {
+        ServerOutput output = new ServerOutput();
+        Optional<UserEntity> userEntityOptional = UserTable.getInstance().lookup(userEntity -> userEntity.getUsername().equals(username));
+
+        if (!userEntityOptional.isPresent()) {
+            output.setOutput("The User Does Not Exist!");
+            output.setState(CREATEUSER);
+        } else {
+            try {
+                UserTable.getInstance().remove(userEntityOptional.get().getId());
+                output.setOutput("Success!");
+            } catch (Exception e) {
+                output.setOutput(e.getMessage());
+            }
+            output.setState(CLERK);
+        }
+        return output;
     }
 
     public ServerOutput deleteTitle(String input) {
