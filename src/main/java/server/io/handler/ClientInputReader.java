@@ -7,9 +7,13 @@ import main.java.server.io.handler.model.ServerOutput;
 import static main.java.server.io.handler.model.ClientState.*;
 
 public class ClientInputReader {
+    private ClientInputHandler clientInputHandler;
+
+
     public ServerOutput processInput(String input, ClientState state) {
         String output = "";
-        ServerOutput serverOutput = new ServerOutput();
+        Output serverOutput = new ServerOutput();
+
         if (state == WAITING) {
             output = "Who Are you?Clerk or User?";
             state = FINISHWAITING;
@@ -33,14 +37,14 @@ public class ClientInputReader {
                 serverOutput.setState(state);
             }
         }else if(state==CLERKLOGIN){
-            o=outputHandler.clerkLogin(input);
+            o=clientInputHandler.clerkLogin(input);
 
             output=o.getOutput();
             state=o.getState();
             serverOutput.setOutput(output);
             serverOutput.setState(state);
         }else if(state==USERLOGIN){
-            o=outputHandler.userLogin(input);
+            o=clientInputHandler.userLogin(input);
             output=o.getOutput();
             state=o.getState();
             serverOutput.setOutput(output);
@@ -143,7 +147,7 @@ public class ClientInputReader {
                 serverOutput.setOutput(output);
                 serverOutput.setState(state);
             }else{
-                o=outputHandler.createUser(input);
+                o=clientInputHandler.createUser(input);
                 output=o.getOutput();
                 state=o.getState();
                 serverOutput.setOutput(output);
@@ -161,7 +165,7 @@ public class ClientInputReader {
                 serverOutput.setOutput(output);
                 serverOutput.setState(state);
             }else{
-                o=outputHandler.createTitle(input);
+                o=clientInputHandler.createTitle(input);
                 output=o.getOutput();
                 state=o.getState();
                 serverOutput.setOutput(output);
@@ -179,7 +183,7 @@ public class ClientInputReader {
                 serverOutput.setOutput(output);
                 serverOutput.setState(state);
             }else{
-                o=outputHandler.createItem(input);
+                o=clientInputHandler.createItem(input);
                 output=o.getOutput();
                 state=o.getState();
                 serverOutput.setOutput(output);
@@ -197,7 +201,7 @@ public class ClientInputReader {
                 serverOutput.setOutput(output);
                 serverOutput.setState(state);
             }else{
-                o=outputHandler.deleteUser(input);
+                o=clientInputHandler.deleteUser(input);
                 output=o.getOutput();
                 state=o.getState();
                 serverOutput.setOutput(output);
@@ -215,7 +219,7 @@ public class ClientInputReader {
                 serverOutput.setOutput(output);
                 serverOutput.setState(state);
             }else{
-                o=outputHandler.deleteTitle(input);
+                o=clientInputHandler.deleteTitle(input);
                 output=o.getOutput();
                 state=o.getState();
                 serverOutput.setOutput(output);
@@ -233,7 +237,7 @@ public class ClientInputReader {
                 serverOutput.setOutput(output);
                 serverOutput.setState(state);
             }else{
-                o=outputHandler.deleteItem(input);
+                o=clientInputHandler.deleteItem(input);
                 output=o.getOutput();
                 state=o.getState();
                 serverOutput.setOutput(output);
@@ -251,7 +255,7 @@ public class ClientInputReader {
                 serverOutput.setOutput(output);
                 serverOutput.setState(state);
             }else{
-                o=outputHandler.borrow(input);
+                o=clientInputHandler.borrow(input);
                 output=o.getOutput();
                 state=o.getState();
                 serverOutput.setOutput(output);
@@ -269,7 +273,7 @@ public class ClientInputReader {
                 serverOutput.setOutput(output);
                 serverOutput.setState(state);
             }else{
-                o=outputHandler.renew(input);
+                o=clientInputHandler.renew(input);
                 output=o.getOutput();
                 state=o.getState();
                 serverOutput.setOutput(output);
@@ -287,7 +291,7 @@ public class ClientInputReader {
                 serverOutput.setOutput(output);
                 serverOutput.setState(state);
             }else{
-                o=outputHandler.returnBserverOutput.(input);
+                o=clientInputHandler.returnBserverOutput.(input);
                 output=o.getOutput();
                 state=o.getState();
                 serverOutput.setOutput(output);
@@ -305,7 +309,7 @@ public class ClientInputReader {
                 serverOutput.setOutput(output);
                 serverOutput.setState(state);
             }else{
-                o=outputHandler.payFine(input);
+                o=clientInputHandler.payFine(input);
                 output=o.getOutput();
                 state=o.getState();
                 serverOutput.setOutput(output);
@@ -313,5 +317,10 @@ public class ClientInputReader {
             }
         }
         return serverOutput.
+    }
+
+    public ClientInputReader pipe (ClientInputHandler clientInputHandler) {
+        this.clientInputHandler = clientInputHandler;
+        return this;
     }
 }
