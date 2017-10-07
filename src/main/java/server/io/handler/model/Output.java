@@ -2,18 +2,19 @@ package main.java.server.io.handler.model;
 
 public abstract class Output {
 	private String output;
-    // TODO: Refactor to ENUM
-	private int state;
+	private OutputState state;
 
-	public Output(String output, int state) {
+	public Output () {
+
+	}
+
+	public Output(String output, OutputState state) {
 		this.output = output;
 		this.state = state;
 	}
 
 	@Override
-	public String toString() {
-		return String.format("[%s, %s]", output, state);
-	}
+	public abstract String toString();
 
 	public String getOutput() {
 		return output;
@@ -23,12 +24,11 @@ public abstract class Output {
 		this.output = output;
 	}
 
-	public int getState() {
-		return state;
-	}
+	public OutputState getState() {
+        return state;
+    }
 
-	public void setState(int state) {
-		this.state = state;
-	}
-
+    public void setState(OutputState state) {
+        this.state = state;
+    }
 }
