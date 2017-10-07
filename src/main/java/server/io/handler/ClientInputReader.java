@@ -1,7 +1,6 @@
 package main.java.server.io.handler;
 
 import main.java.server.io.handler.model.ClientState;
-import main.java.server.io.handler.model.Output;
 import main.java.server.io.handler.model.ServerOutput;
 
 import static main.java.server.io.handler.model.ClientState.*;
@@ -12,314 +11,252 @@ public class ClientInputReader {
 
     public ServerOutput processInput(String input, ClientState state) {
         String output = "";
-        Output serverOutput = new ServerOutput();
+        ServerOutput serverOutput = new ServerOutput();
 
         if (state == WAITING) {
-            output = "Who Are you?Clerk or User?";
-            state = FINISHWAITING;
-            serverOutput.setOutput(output);
-            serverOutput.setState(state);
-        }else if (state == FINISHWAITING) {
+            serverOutput.setOutput("Who Are you?Clerk or User?");
+            serverOutput.setState(FINISHWAITING);
+        } else if (state == FINISHWAITING) {
+
             if (input.equalsIgnoreCase("clerk")) {
-                output="Please Input The Password:";
-                state=CLERKLOGIN;
-                serverOutput.setOutput(output);
-                serverOutput.setState(state);
-            }else if (input.equalsIgnoreCase("user")) {
-                output="Please Input Username and Password:'username,password'";
-                state=USERLOGIN;
-                serverOutput.setOutput(output);
-                serverOutput.setState(state);
-            }else{
-                output = "Who Are you?Clerk or User?";
-                state = FINISHWAITING;
-                serverOutput.setOutput(output);
-                serverOutput.setState(state);
+                serverOutput.setOutput("Please Input The Password:");
+                serverOutput.setState(CLERKLOGIN);
+            } else if (input.equalsIgnoreCase("user")) {
+                serverOutput.setOutput("Please Input Username and Password:'username,password'");
+                serverOutput.setState(USERLOGIN);
+            } else {
+                serverOutput.setOutput("Who Are you?Clerk or User?");
+                serverOutput.setState(FINISHWAITING);
             }
-        }else if(state==CLERKLOGIN){
-            o=clientInputHandler.clerkLogin(input);
 
-            output=o.getOutput();
-            state=o.getState();
-            serverOutput.setOutput(output);
-            serverOutput.setState(state);
-        }else if(state==USERLOGIN){
-            o=clientInputHandler.userLogin(input);
-            output=o.getOutput();
-            state=o.getState();
-            serverOutput.setOutput(output);
-            serverOutput.setState(state);
-        }else if (state==CLERK){
+        } else if (state == CLERKLOGIN) {
+            serverOutput = clientInputHandler.clerkLogin(input);
+        } else if (state == USERLOGIN) {
+            serverOutput = clientInputHandler.userLogin(input);
+        } else if (state == CLERK) {
             if (input.equalsIgnoreCase("create user")) {
-                output = "Please Input User Info:'username,password'";
-                state=CREATEUSER;
-                serverOutput.setOutput(output);
-
-                serverOutput.setState(state);
-            }else if (input.equalsIgnoreCase("create title")) {
-                output = "Please Input Title Info:'ISBN,title'";
-                state=CREATETITLE;
-                serverOutput.setOutput(output);
-                serverOutput.setState(state);
-            }else if (input.equalsIgnoreCase("create item")) {
-                output = "Please Input Item Info:'ISBN'";
-                state=CREATEITEM;
-                serverOutput.setOutput(output);
-                serverOutput.setState(state);
-            }else if (input.equalsIgnoreCase("delete user")) {
+                serverOutput.setOutput("Please Input User Info:'username,password'");
+                serverOutput.setState(CREATEUSER);
+            } else if (input.equalsIgnoreCase("create title")) {
+                serverOutput.setOutput("Please Input Title Info:'ISBN,title'");
+                serverOutput.setState(CREATETITLE);
+            } else if (input.equalsIgnoreCase("create item")) {
+                serverOutput.setOutput("Please Input Item Info:'ISBN'");
+                serverOutput.setState(CREATEITEM);
+            } else if (input.equalsIgnoreCase("delete user")) {
                 output = "Please Input User Info:'useremail'";
-                state=DELETEUSER;
+                state = DELETEUSER;
                 serverOutput.setOutput(output);
                 serverOutput.setState(state);
-            }else if (input.equalsIgnoreCase("delete title")) {
+            } else if (input.equalsIgnoreCase("delete title")) {
                 output = "Please Input Title Info:'ISBN'";
-                state=DELETETITLE;
+                state = DELETETITLE;
                 serverOutput.setOutput(output);
                 serverOutput.setState(state);
-            }else if (input.equalsIgnoreCase("delete item")) {
+            } else if (input.equalsIgnoreCase("delete item")) {
                 output = "Please Input Item Info:'ISBN,copynumber'";
-                state=DELETEITEM;
+                state = DELETEITEM;
                 serverOutput.setOutput(output);
                 serverOutput.setState(state);
-            }else if(input.equalsIgnoreCase("log out")){
+            } else if (input.equalsIgnoreCase("log out")) {
                 output = "Successfully Log Out!";
                 state = WAITING;
                 serverOutput.setOutput(output);
                 serverOutput.setState(state);
-            }else if(input.equalsIgnoreCase("main menu")){
+            } else if (input.equalsIgnoreCase("main menu")) {
                 output = "What can I do for you?Menu:Create User/Title/Item,Delete User/Title/Item.";
                 state = CLERK;
                 serverOutput.setOutput(output);
                 serverOutput.setState(state);
-            }else{
+            } else {
                 output = "Please select from the menu.Menu:Create User/Title/Item,Delete User/Title/Item.";
                 state = CLERK;
                 serverOutput.setOutput(output);
                 serverOutput.setState(state);
             }
-        }else if (state==USER){
+        } else if (state == USER) {
             if (input.equalsIgnoreCase("borrow")) {
                 output = "Please Input User Info:'useremail,ISBN,copynumber'";
-                state=BORROW;
+                state = BORROW;
                 serverOutput.setOutput(output);
                 serverOutput.setState(state);
-            }else if (input.equalsIgnoreCase("renew")) {
+            } else if (input.equalsIgnoreCase("renew")) {
                 output = "Please Input Title Info:'useremail,ISBN,copynumber'";
-                state=RENEW;
+                state = RENEW;
                 serverOutput.setOutput(output);
                 serverOutput.setState(state);
-            }else if (input.equalsIgnoreCase("return")) {
+            } else if (input.equalsIgnoreCase("return")) {
                 output = "Please Input Item Info:'useremail,ISBN,copynumber'";
-                state=RETURN;
+                state = RETURN;
                 serverOutput.setOutput(output);
                 serverOutput.setState(state);
-            }else if (input.equalsIgnoreCase("pay fine")) {
+            } else if (input.equalsIgnoreCase("pay fine")) {
                 output = "Please Input User Info:'useremail'";
-                state=PAYFINE;
+                state = PAYFINE;
                 serverOutput.setOutput(output);
                 serverOutput.setState(state);
-            }else if(input.equalsIgnoreCase("log out")){
+            } else if (input.equalsIgnoreCase("log out")) {
                 output = "Successfully Log Out!";
                 state = WAITING;
                 serverOutput.setOutput(output);
                 serverOutput.setState(state);
-            }else if(input.equalsIgnoreCase("main menu")){
+            } else if (input.equalsIgnoreCase("main menu")) {
                 output = "What can I do for you?Menu:Borrow,Renew,Return,Pay Fine.";
                 state = USER;
                 serverOutput.setOutput(output);
                 serverOutput.setState(state);
-            }else{
+            } else {
                 output = "Please select from the menu.Menu:Borrow,Renew,Return,Pay Fine.";
                 state = USER;
                 serverOutput.setOutput(output);
                 serverOutput.setState(state);
             }
 
-        }else if(state==CREATEUSER){
-            if(input.equalsIgnoreCase("log out")){
+        } else if (state == CREATEUSER) {
+            if (input.equalsIgnoreCase("log out")) {
                 output = "Successfully Log Out!";
                 state = WAITING;
                 serverOutput.setOutput(output);
                 serverOutput.setState(state);
-            }else if(input.equalsIgnoreCase("main menu")){
+            } else if (input.equalsIgnoreCase("main menu")) {
                 output = "What can I do for you?Menu:Create User/Title/Item,Delete User/Title/Item.";
                 state = CLERK;
                 serverOutput.setOutput(output);
                 serverOutput.setState(state);
-            }else{
-                o=clientInputHandler.createUser(input);
-                output=o.getOutput();
-                state=o.getState();
-                serverOutput.setOutput(output);
-                serverOutput.setState(state);
+            } else {
+                serverOutput = clientInputHandler.createUser(input);
             }
-        }else if(state==CREATETITLE){
-            if(input.equalsIgnoreCase("log out")){
+        } else if (state == CREATETITLE) {
+            if (input.equalsIgnoreCase("log out")) {
                 output = "Successfully Log Out!";
                 state = WAITING;
                 serverOutput.setOutput(output);
                 serverOutput.setState(state);
-            }else if(input.equalsIgnoreCase("main menu")){
+            } else if (input.equalsIgnoreCase("main menu")) {
                 output = "What can I do for you?Menu:Create User/Title/Item,Delete User/Title/Item.";
                 state = CLERK;
                 serverOutput.setOutput(output);
                 serverOutput.setState(state);
-            }else{
-                o=clientInputHandler.createTitle(input);
-                output=o.getOutput();
-                state=o.getState();
-                serverOutput.setOutput(output);
-                serverOutput.setState(state);
+            } else {
+                serverOutput = clientInputHandler.createTitle(input);
             }
-        }else if(state==CREATEITEM){
-            if(input.equalsIgnoreCase("log out")){
+        } else if (state == CREATEITEM) {
+            if (input.equalsIgnoreCase("log out")) {
                 output = "Successfully Log Out!";
                 state = WAITING;
                 serverOutput.setOutput(output);
                 serverOutput.setState(state);
-            }else if(input.equalsIgnoreCase("main menu")){
+            } else if (input.equalsIgnoreCase("main menu")) {
                 output = "What can I do for you?Menu:Create User/Title/Item,Delete User/Title/Item.";
                 state = CLERK;
                 serverOutput.setOutput(output);
                 serverOutput.setState(state);
-            }else{
-                o=clientInputHandler.createItem(input);
-                output=o.getOutput();
-                state=o.getState();
-                serverOutput.setOutput(output);
-                serverOutput.setState(state);
+            } else {
+                serverOutput = clientInputHandler.createItem(input);
             }
-        }else if(state==DELETEUSER){
-            if(input.equalsIgnoreCase("log out")){
+        } else if (state == DELETEUSER) {
+            if (input.equalsIgnoreCase("log out")) {
                 output = "Successfully Log Out!";
                 state = WAITING;
                 serverOutput.setOutput(output);
                 serverOutput.setState(state);
-            }else if(input.equalsIgnoreCase("main menu")){
+            } else if (input.equalsIgnoreCase("main menu")) {
                 output = "What can I do for you?Menu:Create User/Title/Item,Delete User/Title/Item.";
                 state = CLERK;
                 serverOutput.setOutput(output);
                 serverOutput.setState(state);
-            }else{
-                o=clientInputHandler.deleteUser(input);
-                output=o.getOutput();
-                state=o.getState();
-                serverOutput.setOutput(output);
-                serverOutput.setState(state);
+            } else {
+                serverOutput = clientInputHandler.deleteUser(input);
             }
-        }else if(state==DELETETITLE){
-            if(input.equalsIgnoreCase("log out")){
+        } else if (state == DELETETITLE) {
+            if (input.equalsIgnoreCase("log out")) {
                 output = "Successfully Log Out!";
                 state = WAITING;
                 serverOutput.setOutput(output);
                 serverOutput.setState(state);
-            }else if(input.equalsIgnoreCase("main menu")){
+            } else if (input.equalsIgnoreCase("main menu")) {
                 output = "What can I do for you?Menu:Create User/Title/Item,Delete User/Title/Item.";
                 state = CLERK;
                 serverOutput.setOutput(output);
                 serverOutput.setState(state);
-            }else{
-                o=clientInputHandler.deleteTitle(input);
-                output=o.getOutput();
-                state=o.getState();
-                serverOutput.setOutput(output);
-                serverOutput.setState(state);
+            } else {
+                serverOutput = clientInputHandler.deleteTitle(input);
             }
-        }else if(state==DELETEITEM){
-            if(input.equalsIgnoreCase("log out")){
+        } else if (state == DELETEITEM) {
+            if (input.equalsIgnoreCase("log out")) {
                 output = "Successfully Log Out!";
                 state = WAITING;
                 serverOutput.setOutput(output);
                 serverOutput.setState(state);
-            }else if(input.equalsIgnoreCase("main menu")){
+            } else if (input.equalsIgnoreCase("main menu")) {
                 output = "What can I do for you?Menu:Create User/Title/Item,Delete User/Title/Item.";
                 state = CLERK;
                 serverOutput.setOutput(output);
                 serverOutput.setState(state);
-            }else{
-                o=clientInputHandler.deleteItem(input);
-                output=o.getOutput();
-                state=o.getState();
-                serverOutput.setOutput(output);
-                serverOutput.setState(state);
+            } else {
+                serverOutput = clientInputHandler.deleteItem(input);
             }
-        }else if(state==BORROW){
-            if(input.equalsIgnoreCase("log out")){
+        } else if (state == BORROW) {
+            if (input.equalsIgnoreCase("log out")) {
                 output = "Successfully Log Out!";
                 state = WAITING;
                 serverOutput.setOutput(output);
                 serverOutput.setState(state);
-            }else if(input.equalsIgnoreCase("main menu")){
+            } else if (input.equalsIgnoreCase("main menu")) {
                 output = "What can I do for you?Menu:Borrow,Renew,Return,Pay Fine.";
                 state = USER;
                 serverOutput.setOutput(output);
                 serverOutput.setState(state);
-            }else{
-                o=clientInputHandler.borrow(input);
-                output=o.getOutput();
-                state=o.getState();
-                serverOutput.setOutput(output);
-                serverOutput.setState(state);
+            } else {
+                serverOutput = clientInputHandler.borrowBook(input);
             }
-        }else if(state==RENEW){
-            if(input.equalsIgnoreCase("log out")){
+        } else if (state == RENEW) {
+            if (input.equalsIgnoreCase("log out")) {
                 output = "Successfully Log Out!";
                 state = WAITING;
                 serverOutput.setOutput(output);
                 serverOutput.setState(state);
-            }else if(input.equalsIgnoreCase("main menu")){
+            } else if (input.equalsIgnoreCase("main menu")) {
                 output = "What can I do for you?Menu:Borrow,Renew,Return,Pay Fine.";
                 state = USER;
                 serverOutput.setOutput(output);
                 serverOutput.setState(state);
-            }else{
-                o=clientInputHandler.renew(input);
-                output=o.getOutput();
-                state=o.getState();
-                serverOutput.setOutput(output);
-                serverOutput.setState(state);
+            } else {
+                serverOutput = clientInputHandler.renewBook(input);
             }
-        }else if(state==RETURN){
-            if(input.equalsIgnoreCase("log out")){
+        } else if (state == RETURN) {
+            if (input.equalsIgnoreCase("log out")) {
                 output = "Successfully Log Out!";
                 state = WAITING;
                 serverOutput.setOutput(output);
                 serverOutput.setState(state);
-            }else if(input.equalsIgnoreCase("main menu")){
+            } else if (input.equalsIgnoreCase("main menu")) {
                 output = "What can I do for you?Menu:Borrow,Renew,Return,Pay Fine.";
                 state = USER;
                 serverOutput.setOutput(output);
                 serverOutput.setState(state);
-            }else{
-                o=clientInputHandler.returnBserverOutput.(input);
-                output=o.getOutput();
-                state=o.getState();
-                serverOutput.setOutput(output);
-                serverOutput.setState(state);
+            } else {
+                serverOutput = clientInputHandler.returnBook(input);
             }
-        }else if(state==PAYFINE){
-            if(input.equalsIgnoreCase("log out")){
+        } else if (state == PAYFINE) {
+            if (input.equalsIgnoreCase("log out")) {
                 output = "Successfully Log Out!";
                 state = WAITING;
                 serverOutput.setOutput(output);
                 serverOutput.setState(state);
-            }else if(input.equalsIgnoreCase("main menu")){
+            } else if (input.equalsIgnoreCase("main menu")) {
                 output = "What can I do for you?Menu:Borrow,Renew,Return,Pay Fine.";
                 state = USER;
                 serverOutput.setOutput(output);
                 serverOutput.setState(state);
-            }else{
-                o=clientInputHandler.payFine(input);
-                output=o.getOutput();
-                state=o.getState();
-                serverOutput.setOutput(output);
-                serverOutput.setState(state);
+            } else {
+                serverOutput = clientInputHandler.payFine(input);
             }
         }
-        return serverOutput.
+        return serverOutput;
     }
 
-    public ClientInputReader pipe (ClientInputHandler clientInputHandler) {
+    public ClientInputReader pipe(ClientInputHandler clientInputHandler) {
         this.clientInputHandler = clientInputHandler;
         return this;
     }

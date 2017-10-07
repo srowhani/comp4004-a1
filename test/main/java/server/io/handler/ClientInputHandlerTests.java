@@ -2,15 +2,22 @@ package main.java.server.io.handler;
 
 import main.java.server.io.dao.TitleTable;
 import main.java.server.io.dao.UserTable;
+import main.java.server.io.handler.model.ClientState;
 import main.java.server.io.handler.model.ServerOutput;
 import main.java.server.io.model.TitleEntity;
 import main.java.server.io.model.UserEntity;
 import main.java.util.Config;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.util.Date;
+import java.util.UUID;
+
 import static junit.framework.TestCase.assertNotNull;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static util.Assert.assertDoesNotThrow;
 
@@ -23,11 +30,6 @@ public class ClientInputHandlerTests {
     public void setup () {
         if (clientInputHandler == null) {
             assertDoesNotThrow(() -> clientInputHandler = new ClientInputHandler());
-        }
-
-        if (userActor == null) {
-            UserTable.getInstance().getUserTable().clear();
-            userActor = UserTable.getInstance().add("user", "pass");
         }
     }
 
@@ -70,40 +72,45 @@ public class ClientInputHandlerTests {
 
     @Test
     public void createItemTest () {
-        clientInputHandler.createItem();
+//        clientInputHandler.createItem();
 
         fail("Not yet implemented");
     }
 
     @Test
     public void deleteItemTest () {
-        clientInputHandler.deleteItem();
+//        clientInputHandler.deleteItem();
         fail("not yet impl");
     }
 
     @Test
     public void createTitleTest () {
-        clientInputHandler.createTitle();
+//        clientInputHandler.createTitle();
 
         fail("Not yet implemented");
     }
 
     @Test
     public void deleteTitleTest () {
-        clientInputHandler.deleteTitle();
+//        clientInputHandler.deleteTitle();
         fail("not yet impl");
     }
 
     @Test
     public void createUserTest () {
-        clientInputHandler.createUser();
+        ServerOutput serverOutput = clientInputHandler.createUser(String.format("'%s,%s'", "test-user" + seed(), "test-password" + seed()));
 
-        fail("Not yet implemented");
+        assertEquals(serverOutput.getOutput(), "Success!");
+        assertEquals(serverOutput.getState(), ClientState.CLERK);
     }
 
     @Test
     public void deleteUserTest () {
-        clientInputHandler.deleteUser();
+        ServerOutput serverOutput = clientInputHandler.deleteUser(String.format("'%s,%s'", "test-user" + seed(), "test-password" + seed()));
         fail("not yet impl");
+    }
+
+    public String seed () {
+        return UUID.randomUUID().toString();
     }
 }
