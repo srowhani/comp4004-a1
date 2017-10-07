@@ -19,7 +19,7 @@ public class ConfigurationTest {
         assertEquals(config.DEFAULT_PORT, 5050);
         assertEquals(config.DEFAULT_HOST, "127.0.0.1");
         assertEquals(config.MAX_BORROWED_ITEMS, 3);
-        assertEquals(config.SIMULATED_DAY, 1 * 60 * 1000);
+        assertEquals(config.SIMULATED_DAY, 86400000);
         assertEquals(config.OVERDUE, 5);
         assertEquals(config.CLERK_PASSWORD, "admin");
     }
