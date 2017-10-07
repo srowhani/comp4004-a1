@@ -18,7 +18,7 @@ public class ServerOutputTests {
         serverOutput.setOutput(testOutput);
         assertEquals(serverOutput.getOutput(), testOutput);
 
-        OutputState outputState = OutputState.ETC;
+        ClientState outputState = ClientState.CLERK;
         serverOutput.setState(outputState);
         assertEquals(serverOutput.getState(), outputState);
     }
