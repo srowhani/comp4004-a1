@@ -1,4 +1,4 @@
-package main.java.server.io.handler;
+package main.java.server.io.handler.model;
 
 import main.java.server.io.handler.model.Client;
 import main.java.server.io.handler.model.ClientState;
