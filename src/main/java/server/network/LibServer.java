@@ -1,5 +1,8 @@
 package main.java.server.network;
 
+import main.java.server.io.dao.*;
+import main.java.server.io.handler.model.Client;
+import main.java.server.io.handler.model.Output;
 import main.java.util.Trace;
 import org.apache.log4j.Logger;
 
@@ -7,7 +10,9 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /* Modified method based on the course COMP 3004 example*/
 /*Reference:http://people.scs.carleton.ca/~jeanpier//304W16/T1%20TDD/4b-%20ChatExample%20and%20other%20files/*/
@@ -17,7 +22,7 @@ public class LibServer implements Runnable{
 	private ServerSocket server = null;
 	private HashMap<Integer, ServerThread> clients;
 	private Logger logger = Trace.getInstance().getLogger(this);
-	InputHandler handler=new InputHandler();
+	InputHandler handler = new InputHandler();
 	private List<Client> clientList=new ArrayList<Client>();
 	public LibServer(int port) {
 		try {
@@ -30,19 +35,20 @@ public class LibServer implements Runnable{
 			logger.fatal(ioe);
 		}
 	}
-	
+
 	public void start() {
 		if (thread == null) {
 			thread = new Thread(this);
 			thread.start();
 			logger.info(String.format("Server started: %s %d", server,thread.getId()));
 			//Initialize the tables
-			UserTable.getInstance();
+
+            UserTable.getInstance();
 			TitleTable.getInstance();
 			ItemTable.getInstance();
 			LoanTable.getInstance();
 			FeeTable.getInstance();
-			
+
 			System.out.println("Server started successfully!");
 		}
 	}
@@ -52,7 +58,7 @@ public class LibServer implements Runnable{
 			try {
 				logger.info("Waiting for a client ...");
 				addThread(server.accept());
-			} catch (IOException e) {				
+			} catch (IOException e) {
 				logger.fatal(e);
 			}}
 	}
@@ -77,7 +83,7 @@ public class LibServer implements Runnable{
 	}
 
 	public synchronized void handle(int ID, String input) {
-		if (input.equals("Exit")) 
+		if (input.equals("Exit"))
 		{
 			logger.info(String.format("Client: %d Exits", ID));
 			if (clients.containsKey(ID)) {
@@ -86,15 +92,15 @@ public class LibServer implements Runnable{
 				logger.info(String.format("Client : "+ ID +"Exits"));
 			}}
 
-		else 
+		else
 		{
-			ServerThread from = clients.get(ID);			
+			ServerThread from = clients.get(ID);
 			logger.info(String.format("Input from %s:%d"+" "+input,from.getSocketAddress(),from.getID()));
-			ServerOutput so;
+			Output so;
 			String output;
 			if(exist(from)){
 				int state=clientState(from);
-				so=handler.processInput(input,state);
+				so = handler.processInput(input,state);
 				output=so.getOutput()+"\n";
 				from.send(output);
 				clientSetState(from,so.getState());
@@ -108,8 +114,8 @@ public class LibServer implements Runnable{
 				clientSetState(from,so.getState());
 				logger.info(String.format("Output to %s:%d"+" "+output,from.getSocketAddress(),from.getID()));
 			};
-			
-	}} 
+
+	}}
 
 
 	private void clientSetState(ServerThread from, int state) {
@@ -120,7 +126,7 @@ public class LibServer implements Runnable{
 			}
 		}
 		clientList.get(index).setState(state);
-		
+
 	}
 
 	private int clientState(ServerThread from) {
@@ -154,6 +160,6 @@ public class LibServer implements Runnable{
 		}
 	}
 
-	
+
 
 }

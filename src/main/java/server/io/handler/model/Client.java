@@ -1,25 +1,30 @@
 package main.java.server.io.handler.model;
 
-import server.network.ServerThread;
+import main.java.server.network.ServerThread;
 
 public class Client {
-	ServerThread client;
-	int state;
-	public Client(ServerThread client,int state){
-		this.client=client;
-		this.state=state;
-		
+	private ServerThread serverThread;
+	private ClientState state;
+
+	public Client () {
+        this.serverThread = null;
+        this.state = null;
 	}
-	public ServerThread getClient() {
-		return client;
+
+	public Client(ServerThread serverThread, ClientState state){
+		this.serverThread = serverThread;
+		this.state = state;
 	}
-	public void setClient(ServerThread client) {
-		this.client = client;
+	public ServerThread getServerThread() {
+		return serverThread;
 	}
-	public int getState() {
+	public void setServerThread(ServerThread client) {
+		this.serverThread = serverThread;
+	}
+	public ClientState getState() {
 		return state;
 	}
-	public void setState(int state) {
+	public void setState(ClientState state) {
 		this.state = state;
 	}
 
