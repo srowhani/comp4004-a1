@@ -1,5 +1,8 @@
 package main.java.server.io.dao;
 
+import main.java.server.io.error.LoanExistsException;
+import main.java.server.io.error.OutstandingFeeExistsException;
+import main.java.server.io.error.UserEntityNotFoundException;
 import main.java.server.io.model.UserEntity;
 import org.junit.Test;
 
@@ -37,7 +40,11 @@ public class UserTableTests {
                 .stream()
                 .map(u -> u.getId())
                 .collect(Collectors.toList())
-                .forEach(id -> userTable.remove(id));
+                .forEach(id -> {
+                    try {
+                        userTable.remove(id);
+                    } catch (Exception e) {}
+                });
 
         assertEquals(userTable.getUserTable().size(), 0);
     }

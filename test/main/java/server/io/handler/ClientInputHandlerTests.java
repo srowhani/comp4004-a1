@@ -106,8 +106,13 @@ public class ClientInputHandlerTests {
 
     @Test
     public void deleteUserTest () {
-        ServerOutput serverOutput = clientInputHandler.deleteUser(String.format("'%s,%s'", "test-user" + seed(), "test-password" + seed()));
-        fail("not yet impl");
+        String seed = seed();
+        ServerOutput serverOutput = clientInputHandler.createUser(String.format("%s,%s", "test-user" + seed, "test-password" + seed));
+        assertEquals(serverOutput.getOutput(), "Success!");
+        assertEquals(serverOutput.getState(), ClientState.CLERK);
+        serverOutput = clientInputHandler.deleteUser("test-user" + seed);
+        assertEquals(serverOutput.getOutput(), "Success!");
+        assertEquals(serverOutput.getState(), ClientState.CLERK);
     }
 
     public String seed () {
