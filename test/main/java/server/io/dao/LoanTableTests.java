@@ -1,7 +1,7 @@
 package main.java.server.io.dao;
 
-import org.junit.Test;
 import main.java.server.io.model.LoanEntity;
+import org.junit.Test;
 
 import java.util.Date;
 import java.util.Optional;
@@ -14,18 +14,18 @@ public class LoanTableTests {
     LoanEntity testLoan;
 
     @Test
-    public void getInstanceNonNull () {
+    public void getInstanceNonNull() {
         assertDoesNotThrow(() -> LoanTable.getInstance());
     }
 
     @Test
-    public void createLoan () {
+    public void createLoan() {
         LoanTable loanTable = LoanTable.getInstance();
-        assertNotNull(testLoan = loanTable.createLoan(1, "", "",  new Date()));
+        assertNotNull(testLoan = loanTable.createLoan(1, "", "", new Date()));
     }
 
     @Test
-    public void testLookup () {
+    public void testLookup() {
         LoanTable loanTable = LoanTable.getInstance();
         createLoan();
         Optional<LoanEntity> loanEntityOptional = loanTable.lookup(

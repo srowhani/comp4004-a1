@@ -2,9 +2,8 @@ package main.java.server.io.model;
 
 import org.junit.Test;
 
-import static util.Assert.assertDoesNotThrow;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static util.Assert.assertDoesNotThrow;
 
 public class FeeEntityTests implements GenericModelTest {
     @Override
@@ -20,7 +19,7 @@ public class FeeEntityTests implements GenericModelTest {
         FeeEntity feeEntity = new FeeEntity();
 
         int userId = 1,
-            fee = 1;
+                fee = 1;
 
         feeEntity.setUserId(userId);
         feeEntity.setFee(fee);

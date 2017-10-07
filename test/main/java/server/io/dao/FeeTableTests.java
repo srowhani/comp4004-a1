@@ -8,44 +8,43 @@ import org.junit.Test;
 import java.util.Optional;
 
 import static junit.framework.TestCase.assertTrue;
-import static util.Assert.assertDoesNotThrow;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
+import static util.Assert.assertDoesNotThrow;
 
 public class FeeTableTests {
     FeeTable feeTable;
 
 
     @Before
-    public void setup () {
+    public void setup() {
         feeTable = FeeTable.getInstance();
         feeTable.getFeeTable().clear();
 
     }
 
     @Test
-    public void instantiateInstance () {
+    public void instantiateInstance() {
         assertDoesNotThrow(() -> FeeTable.getInstance());
     }
 
     @Test
-    public void lookupExistingItemReturnsPresentOptional () {
+    public void lookupExistingItemReturnsPresentOptional() {
         Optional<UserEntity> existingUser = UserTable.getInstance().getUserTable().stream().findAny();
         assertTrue(existingUser.isPresent());
         int daysOverDue = 3;
-        feeTable.applyFee(existingUser.get().getId(), Config.SIMULATED_DAY * (Config.OVERDUE + daysOverDue) );
+        feeTable.applyFee(existingUser.get().getId(), Config.SIMULATED_DAY * (Config.OVERDUE + daysOverDue));
 
         assertTrue(feeTable.lookup(feeEntity -> feeEntity.getFee() == daysOverDue).isPresent());
     }
 
     @Test
-    public void lookupExistingItemReturnsEmptyOptional () {
+    public void lookupExistingItemReturnsEmptyOptional() {
         assertNotNull(feeTable.lookup(item -> false));
     }
 
     @Test
-    public void applyFeeAddsFeeToUserCorrectly () {
+    public void applyFeeAddsFeeToUserCorrectly() {
 
         Optional<UserEntity> existingUser = UserTable.getInstance().getUserTable().stream().findFirst();
 
@@ -59,7 +58,7 @@ public class FeeTableTests {
     }
 
     @Test
-    public void payFineAdjustsAmountOwedCorrectly () {
+    public void payFineAdjustsAmountOwedCorrectly() {
         Optional<UserEntity> existingUser = UserTable.getInstance().getUserTable().stream().findFirst();
         assertTrue(existingUser.isPresent());
 

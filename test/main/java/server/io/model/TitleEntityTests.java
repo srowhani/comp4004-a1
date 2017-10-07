@@ -2,18 +2,19 @@ package main.java.server.io.model;
 
 import org.junit.Test;
 
-import static util.Assert.assertDoesNotThrow;
 import static org.junit.Assert.assertEquals;
+import static util.Assert.assertDoesNotThrow;
 
 public class TitleEntityTests implements GenericModelTest {
     @Override
     @Test
-    public void canInstantiate () {
+    public void canInstantiate() {
         assertDoesNotThrow(() -> new TitleEntity("ISBN", "Title"));
     }
+
     @Override
     @Test
-    public void canAccessProperties () {
+    public void canAccessProperties() {
         String isbn = "ISBN";
         String title = "Title";
 

@@ -9,12 +9,12 @@ public class ConfigurationTest {
     private Config config;
 
     @Before
-    public void setup () {
+    public void setup() {
         config = new Config();
     }
 
     @Test
-    public void assertDefaultProperties () {
+    public void assertDefaultProperties() {
         assertEquals(config.MAX_CLIENTS, 5);
         assertEquals(config.DEFAULT_PORT, 5050);
         assertEquals(config.DEFAULT_HOST, "127.0.0.1");

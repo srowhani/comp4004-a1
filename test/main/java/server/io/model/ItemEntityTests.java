@@ -2,8 +2,8 @@ package main.java.server.io.model;
 
 import org.junit.Test;
 
-import static util.Assert.assertDoesNotThrow;
 import static org.junit.Assert.assertEquals;
+import static util.Assert.assertDoesNotThrow;
 
 public class ItemEntityTests implements GenericModelTest {
     @Override

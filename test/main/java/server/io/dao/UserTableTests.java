@@ -1,37 +1,36 @@
 package main.java.server.io.dao;
 
-import org.junit.Test;
 import main.java.server.io.model.UserEntity;
+import org.junit.Test;
 
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static util.Assert.assertDoesNotThrow;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static util.Assert.assertDoesNotThrow;
 
 public class UserTableTests {
     @Test
-    public void getInstanceNonNull () {
+    public void getInstanceNonNull() {
         assertDoesNotThrow(() -> UserTable.getInstance());
     }
 
     @Test
-    public void createUser () {
+    public void createUser() {
         UserTable userTable = UserTable.getInstance();
         String username = "username";
         String password = "password";
         userTable.add(username, password);
 
         assertTrue(userTable.getUserTable().stream().anyMatch(item ->
-            item.getUsername().equals(username) && item.getPassword().equals(password)
+                item.getUsername().equals(username) && item.getPassword().equals(password)
         ));
 
     }
 
     @Test
-    public void deleteUser () {
+    public void deleteUser() {
         UserTable userTable = UserTable.getInstance();
 
         userTable.getUserTable()
@@ -44,7 +43,7 @@ public class UserTableTests {
     }
 
     @Test
-    public void lookupRetrievesOptional () {
+    public void lookupRetrievesOptional() {
         createUser();
 
         UserTable userTable = UserTable.getInstance();

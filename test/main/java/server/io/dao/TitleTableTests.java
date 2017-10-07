@@ -1,24 +1,23 @@
 package main.java.server.io.dao;
 
-import org.junit.Test;
 import main.java.server.io.model.TitleEntity;
+import org.junit.Test;
 
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static util.Assert.assertDoesNotThrow;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static util.Assert.assertDoesNotThrow;
 
 public class TitleTableTests {
     @Test
-    public void getInstanceNonNull () {
+    public void getInstanceNonNull() {
         assertDoesNotThrow(() -> TitleTable.getInstance());
     }
 
     @Test
-    public void createTitle () {
+    public void createTitle() {
         TitleTable titleTable = TitleTable.getInstance();
         String isbn = "ISBN";
         String title = "Book title";
@@ -31,7 +30,7 @@ public class TitleTableTests {
     }
 
     @Test
-    public void deleteTitle () {
+    public void deleteTitle() {
         TitleTable titleTable = TitleTable.getInstance();
 
         titleTable.getTitleTable()
@@ -44,7 +43,7 @@ public class TitleTableTests {
     }
 
     @Test
-    public void lookupRetrievesOptional () {
+    public void lookupRetrievesOptional() {
         createTitle();
         TitleTable titleTable = TitleTable.getInstance();
 

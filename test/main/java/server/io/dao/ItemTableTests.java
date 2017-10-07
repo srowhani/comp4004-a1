@@ -6,18 +6,17 @@ import main.java.server.io.model.ItemEntity;
 import org.junit.Test;
 
 import static junit.framework.TestCase.assertTrue;
-import static util.Assert.assertDoesNotThrow;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.fail;
+import static util.Assert.assertDoesNotThrow;
 
 public class ItemTableTests {
     @Test
-    public void getInstanceNonNull () {
+    public void getInstanceNonNull() {
         assertDoesNotThrow(() -> ItemTable.getInstance());
     }
 
     @Test
-    public void addItemAndPerformLookup () {
+    public void addItemAndPerformLookup() {
         ItemTable itemTable = ItemTable.getInstance();
         String isbn = "9781442668584";
         itemTable.getItemTable().clear();
@@ -28,13 +27,13 @@ public class ItemTableTests {
     }
 
     @Test
-    public void testLookupOnNonExistentISBN () {
+    public void testLookupOnNonExistentISBN() {
         ItemTable itemTable = ItemTable.getInstance();
         assertFalse(itemTable.lookup(item -> item.getISBN().equals("xD")).isPresent());
     }
 
     @Test
-    public void deleteAllDestroysAllItems () {
+    public void deleteAllDestroysAllItems() {
         ItemTable itemTable = ItemTable.getInstance();
         ItemEntity itemEntity = itemTable.getItemTable().get(0);
         itemTable.deleteAll(itemEntity.getISBN());
@@ -42,7 +41,7 @@ public class ItemTableTests {
     }
 
     @Test
-    public void deleteItem () {
+    public void deleteItem() {
         addItemAndPerformLookup();
 
         ItemTable itemTable = ItemTable.getInstance();

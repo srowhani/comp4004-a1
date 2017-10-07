@@ -4,8 +4,8 @@ import org.junit.Test;
 
 import java.util.Date;
 
-import static util.Assert.assertDoesNotThrow;
 import static org.junit.Assert.assertEquals;
+import static util.Assert.assertDoesNotThrow;
 
 public class LoanEntityTests implements GenericModelTest {
 
@@ -20,8 +20,8 @@ public class LoanEntityTests implements GenericModelTest {
     public void canAccessProperties() {
         int uid = 1;
         String isbn = "isbn",
-               copyNumber = "copyNumber",
-               renewState = "renewState";
+                copyNumber = "copyNumber",
+                renewState = "renewState";
 
         Date date = new Date();
         LoanEntity loanEntity = new LoanEntity(uid, isbn, copyNumber, date, renewState);

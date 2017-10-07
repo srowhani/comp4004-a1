@@ -2,18 +2,18 @@ package main.java.server.io.model;
 
 import org.junit.Test;
 
-import static util.Assert.assertDoesNotThrow;
 import static org.junit.Assert.assertEquals;
+import static util.Assert.assertDoesNotThrow;
 
 public class UserEntityTests implements GenericModelTest {
 
     @Test
-    public void canInstantiate () {
+    public void canInstantiate() {
         assertDoesNotThrow(() -> new UserEntity(1, "username", "password"));
     }
 
     @Test
-    public void canAccessProperties () {
+    public void canAccessProperties() {
         int userId = 1;
         String username = "testuser";
         String password = "password";
