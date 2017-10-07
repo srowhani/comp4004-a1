@@ -1,7 +1,11 @@
 package main.java.server.io.dao;
 
 import main.java.server.io.error.InvalidUserCredentialsException;
+import main.java.server.io.error.LoanExistsException;
+import main.java.server.io.error.OutstandingFeeExistsException;
 import main.java.server.io.error.UserEntityNotFoundException;
+import main.java.server.io.model.FeeEntity;
+import main.java.server.io.model.LoanEntity;
 import main.java.server.io.model.UserEntity;
 import main.java.util.Trace;
 import org.apache.log4j.Logger;
@@ -75,14 +79,28 @@ public class UserTable {
         }
     }
 
-    public UserEntity remove(int id) {
+    public UserEntity remove(int id) throws UserEntityNotFoundException, OutstandingFeeExistsException, LoanExistsException {
         Optional<UserEntity> user = userList
                 .stream()
                 .filter(userEntity -> userEntity.getId() == id)
                 .findFirst();
 
         if (!user.isPresent()) {
-            return null;
+            throw new UserEntityNotFoundException();
+        }
+
+        Optional<FeeEntity> feeEntityOptional = FeeTable.getInstance().lookup(
+                feeEntity -> feeEntity.getUserId() == id);
+
+        if (feeEntityOptional.isPresent()) {
+            throw new OutstandingFeeExistsException();
+        }
+
+        Optional<LoanEntity> loanEntityOptional = LoanTable.getInstance().lookup(
+                loanEntity -> loanEntity.getUserId() == id);
+
+        if (loanEntityOptional.isPresent()) {
+            throw new LoanExistsException();
         }
 
         userList.remove(user.get());
