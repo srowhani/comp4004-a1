@@ -2,13 +2,13 @@ package main.java.server.io.handler.model;
 
 public abstract class Output {
 	private String output;
-	private OutputState state;
+	private ClientState state;
 
 	public Output () {
 
 	}
 
-	public Output(String output, OutputState state) {
+	public Output(String output, ClientState state) {
 		this.output = output;
 		this.state = state;
 	}
@@ -24,11 +24,11 @@ public abstract class Output {
 		this.output = output;
 	}
 
-	public OutputState getState() {
+	public ClientState getState() {
         return state;
     }
 
-    public void setState(OutputState state) {
+    public void setState(ClientState state) {
         this.state = state;
     }
 }
