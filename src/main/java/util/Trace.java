@@ -5,7 +5,8 @@ import org.apache.log4j.PropertyConfigurator;
 
 public class Trace {
     private static Trace _instance = null;
-    public Logger getLogger (Object o) {
+
+    public Logger getLogger(Object o) {
         return Logger.getLogger(o.getClass().getName());
     }
 
