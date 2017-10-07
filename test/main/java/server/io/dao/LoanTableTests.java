@@ -8,7 +8,7 @@ import java.util.Optional;
 
 import static junit.framework.TestCase.assertNotNull;
 import static junit.framework.TestCase.assertTrue;
-import static lib.Assert.assertDoesNotThrow;
+import static util.Assert.assertDoesNotThrow;
 
 public class LoanTableTests {
     LoanEntity testLoan;

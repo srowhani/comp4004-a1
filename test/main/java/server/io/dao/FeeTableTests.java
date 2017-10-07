@@ -5,11 +5,10 @@ import main.java.util.Config;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Date;
 import java.util.Optional;
 
 import static junit.framework.TestCase.assertTrue;
-import static lib.Assert.assertDoesNotThrow;
+import static util.Assert.assertDoesNotThrow;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;

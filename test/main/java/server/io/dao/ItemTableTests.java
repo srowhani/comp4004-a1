@@ -6,7 +6,7 @@ import main.java.server.io.model.ItemEntity;
 import org.junit.Test;
 
 import static junit.framework.TestCase.assertTrue;
-import static lib.Assert.assertDoesNotThrow;
+import static util.Assert.assertDoesNotThrow;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.fail;
 

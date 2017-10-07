@@ -1,7 +1,7 @@
-package lib;
+package util;
 
 /**
- * lib.Assertions Class
+ * util.Assertions Class
  * Use of failing runnable to assert object instantiation works as expected.
  */
 public class Assert {

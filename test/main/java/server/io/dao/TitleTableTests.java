@@ -6,7 +6,7 @@ import main.java.server.io.model.TitleEntity;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static lib.Assert.assertDoesNotThrow;
+import static util.Assert.assertDoesNotThrow;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;

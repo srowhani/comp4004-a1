@@ -2,7 +2,7 @@ package main.java.server.io.handler.model;
 
 import org.junit.Test;
 
-import static lib.Assert.assertDoesNotThrow;
+import static util.Assert.assertDoesNotThrow;
 import static org.junit.Assert.assertEquals;
 
 public class ServerOutputTests {
