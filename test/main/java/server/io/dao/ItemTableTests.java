@@ -35,6 +35,8 @@ public class ItemTableTests {
     @Test
     public void deleteAllDestroysAllItems() {
         ItemTable itemTable = ItemTable.getInstance();
+        itemTable.getItemTable().clear();
+        addItemAndPerformLookup();
         ItemEntity itemEntity = itemTable.getItemTable().get(0);
         itemTable.deleteAll(itemEntity.getISBN());
         assertTrue(itemTable.getItemTable().stream().noneMatch(item -> item.getISBN().equals(itemEntity.getISBN())));
