@@ -68,7 +68,7 @@ public class ClientInputHandlerTests {
 
     @Test
     public void payFineTest () {
-        fail("Not yet implemented");
+        clientInputHandler.payFine()
     }
 
     @Test

@@ -1,9 +1,11 @@
 package main.java.server.io.dao;
 
+import main.java.server.io.error.NoSuchLoanExistsException;
 import main.java.server.io.error.UserEntityExistsException;
 import main.java.server.io.model.UserEntity;
 import org.junit.Test;
 
+import java.util.Date;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -44,7 +46,17 @@ public class UserTableTests {
                 .collect(Collectors.toList())
                 .forEach(id -> {
                     try {
+                        LoanTable.getInstance().getLoanTable().stream().collect(Collectors.toList()).forEach(loanEntity -> {
+                            if (loanEntity.getUserId() == id) {
+                                try {
+                                    LoanTable.getInstance().returnItem(loanEntity.getUserId(), loanEntity.getISBN(), loanEntity.getCopyNumber(), new Date());
+                                } catch (NoSuchLoanExistsException e) {
+                                    warn(e.getMessage());
+                                }
+                            }
+                        });
                         FeeTable.getInstance().payFine(id);
+
                         // TODO: Fix loantable pay loan
                         userTable.remove(id);
                     } catch (Exception e) {
