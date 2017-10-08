@@ -23,8 +23,6 @@ import static org.junit.Assert.fail;
 import static util.Assert.assertDoesNotThrow;
 
 public class ClientInputHandlerTests {
-    private UserEntity userActor;
-
     ClientInputHandler clientInputHandler;
 
     @Before
@@ -40,14 +38,18 @@ public class ClientInputHandlerTests {
     @Test
     public void loginAsClerk() {
         ServerOutput serverOutput = clientInputHandler.clerkLogin(Config.CLERK_PASSWORD);
-        assertNotNull(serverOutput);
+        assertEquals(serverOutput.getState(), ClientState.CLERK);
+
+        serverOutput = clientInputHandler.clerkLogin("wrong password");
+        assertEquals(serverOutput.getState(), ClientState.CLERKLOGIN);
     }
 
     @Test
     public void loginAsUser() {
-        System.out.println(userActor);
-        ServerOutput serverOutput = clientInputHandler.userLogin(String.format("%s,%s", userActor.getUsername(), userActor.getPassword()));
-        assertNotNull(serverOutput);
+        String csv = String.format("%s-%s,%s", "test-user", seed(), "password");
+        clientInputHandler.createUser(csv);
+        ServerOutput serverOutput = clientInputHandler.userLogin(csv);
+        assertEquals(serverOutput.getState(), ClientState.USER);
     }
     @Test
     public void borrowBook() {
