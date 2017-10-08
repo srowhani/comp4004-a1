@@ -65,8 +65,6 @@ public class FeeTable {
     }
 
     public int lookupFee(int userId) {
-        int fee = 0;
-
         return feeList
                 .stream()
                 .filter(feeEntity -> feeEntity.getUserId() == userId)

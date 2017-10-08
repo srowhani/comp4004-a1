@@ -16,7 +16,6 @@ public class ServerThread extends Thread {
     private BufferedWriter streamOut = null;
     private Logger logger = Trace.getInstance().getLogger(this);
     private String clientAddress = null;
-    ;
 
     private boolean done = false;
 
@@ -85,6 +84,7 @@ public class ServerThread extends Thread {
             this.socket = null;
             this.streamIn = null;
         } catch (IOException e) {
+            logger.info(e.getMessage());
         }
     }
 

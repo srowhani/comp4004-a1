@@ -21,7 +21,7 @@ public class Client {
     }
 
     public void setServerThread(ServerThread client) {
-        this.serverThread = serverThread;
+        this.serverThread = client;
     }
 
     public ClientState getState() {

@@ -68,7 +68,7 @@ public class LibServer implements Runnable {
 
     private void addThread(Socket socket) {
         String message = String.format("%s : Client Address : [%15s] Client Socket: [%-6d]\n", "Client accepted", socket.getRemoteSocketAddress(), socket.getPort());
-        logger.info(String.format(message));
+        logger.info(message);
         if (clientCount < Config.MAX_CLIENTS) {
             try {
                 ServerThread serverThread = new ServerThread(this, socket);
@@ -81,7 +81,7 @@ public class LibServer implements Runnable {
             }
         } else {
             logger.info(String.format("Client Tried to connect: %s", socket));
-            logger.info(String.format("Client refused: maximum number of clients reached: d", 5));
+            logger.info("Client refused: maximum number of clients reached");
         }
     }
 
@@ -91,7 +91,7 @@ public class LibServer implements Runnable {
             if (clients.containsKey(ID)) {
                 clients.get(ID).send("Exit" + "\n");
                 remove(ID);
-                logger.info(String.format("Client : " + ID + "Exits"));
+                logger.info("Client : " + ID + "Exits");
             }
         } else {
             ServerThread from = clients.get(ID);
@@ -114,7 +114,6 @@ public class LibServer implements Runnable {
                 setClientState(from, serverOutput.getState());
                 logger.info(String.format("Output to %s:%d" + " " + output, from.getSocketAddress(), from.getID()));
             }
-            ;
 
         }
     }
@@ -162,7 +161,6 @@ public class LibServer implements Runnable {
             clients.remove(ID);
             clientCount--;
             toTerminate.close();
-            toTerminate = null;
         }
     }
 

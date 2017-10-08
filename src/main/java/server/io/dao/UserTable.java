@@ -80,27 +80,21 @@ public class UserTable {
         }
     }
 
-    public UserEntity remove(int id) throws UserEntityNotFoundException, OutstandingFeeExistsException, LoanExistsException {
+    public UserEntity remove(int userId) throws UserEntityNotFoundException, OutstandingFeeExistsException, LoanExistsException {
         Optional<UserEntity> user = userList
                 .stream()
-                .filter(userEntity -> userEntity.getId() == id)
+                .filter(userEntity -> userEntity.getId() == userId)
                 .findFirst();
 
         if (!user.isPresent()) {
             throw new UserEntityNotFoundException();
         }
 
-        Optional<FeeEntity> feeEntityOptional = FeeTable.getInstance().lookup(
-                feeEntity -> feeEntity.getUserId() == id);
-
-        if (feeEntityOptional.isPresent()) {
+        if (FeeTable.getInstance().lookupFee(userId) > 0) {
             throw new OutstandingFeeExistsException();
         }
 
-        Optional<LoanEntity> loanEntityOptional = LoanTable.getInstance().lookup(
-                loanEntity -> loanEntity.getUserId() == id);
-
-        if (loanEntityOptional.isPresent()) {
+        if (LoanTable.getInstance().checkLoanByUserId(userId)) {
             throw new LoanExistsException();
         }
 

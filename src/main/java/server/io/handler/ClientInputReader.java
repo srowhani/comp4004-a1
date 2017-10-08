@@ -10,7 +10,7 @@ public class ClientInputReader {
 
 
     public ServerOutput processInput(String input, ClientState state) {
-        String output = "";
+        String output;
         ServerOutput serverOutput = new ServerOutput();
 
         if (state == WAITING) {
