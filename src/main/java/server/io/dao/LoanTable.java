@@ -27,9 +27,7 @@ public class LoanTable {
         logger.info(String.format("Operation:Initialize LoanTable;LoanTable: %s", loanList));
     }
 
-    ;
-
-    public static final LoanTable getInstance() {
+    public static LoanTable getInstance() {
         return LoanListHolder.INSTANCE;
     }
 
@@ -90,8 +88,6 @@ public class LoanTable {
      * @return
      */
     public boolean checkLoan(Predicate<LoanEntity> loanEntityPredicate) {
-        boolean loanExists = loanList.stream().anyMatch(loanEntityPredicate);
-
-        return loanExists;
+        return loanList.stream().anyMatch(loanEntityPredicate);
     }
 }

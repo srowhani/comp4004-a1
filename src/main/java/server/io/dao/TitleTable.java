@@ -1,5 +1,7 @@
 package main.java.server.io.dao;
 
+import main.java.server.io.error.TitleEntityExistsException;
+import main.java.server.io.error.TitleEntityNotFoundException;
 import main.java.server.io.model.TitleEntity;
 import main.java.util.Trace;
 import org.apache.log4j.Logger;
@@ -30,15 +32,15 @@ public class TitleTable {
 
     ;
 
-    public static final TitleTable getInstance() {
+    public static TitleTable getInstance() {
         return TitleListHolder.INSTANCE;
     }
 
-    public TitleEntity createTitle(String isbn, String bookTitle) {
+    public TitleEntity createTitle(String isbn, String bookTitle) throws TitleEntityExistsException {
         int flag = 0;
         if (titleList.stream().anyMatch(title -> title.getISBN().equals(isbn))) {
             logger.info(String.format("Operation:Create New Title;Title Info:[%s,%s];State:Fail;Reason:The ISBN already existed.", isbn, bookTitle));
-            return null;
+            throw new TitleEntityExistsException();
         }
 
         TitleEntity titleEntity = new TitleEntity(isbn, bookTitle);
@@ -54,14 +56,14 @@ public class TitleTable {
                 .findFirst();
     }
 
-    public TitleEntity remove(String isbn) {
+    public TitleEntity remove(String isbn) throws TitleEntityNotFoundException {
         Optional<TitleEntity> title = titleList
                 .stream()
                 .filter(userEntity -> userEntity.getISBN().equals(isbn))
                 .findFirst();
 
         if (!title.isPresent()) {
-            return null;
+            throw new TitleEntityNotFoundException();
         }
 
         titleList.remove(title.get());

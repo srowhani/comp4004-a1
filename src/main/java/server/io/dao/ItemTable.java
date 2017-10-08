@@ -2,6 +2,7 @@ package main.java.server.io.dao;
 
 import main.java.server.io.error.ItemEntityNotFoundException;
 import main.java.server.io.error.LoanExistsException;
+import main.java.server.io.error.NoSuchISBNExistsException;
 import main.java.server.io.model.ItemEntity;
 import main.java.util.Trace;
 import org.apache.log4j.Logger;
@@ -26,22 +27,24 @@ public class ItemTable {
         String[] cnList = new String[]{"1", "1", "1", "1"};
 
         for (int i = 0; i < ISBNList.length; i++) {
-            addItem(ISBNList[i]);
+            try {
+                addItem(ISBNList[i]);
+            } catch (NoSuchISBNExistsException e) {
+                logger.error(e.getMessage());
+            }
         }
 
         logger.info(String.format("Operation:Initialize ItemTable;ItemTable: %s", itemList));
     }
 
-    ;
-
-    public static final ItemTable getInstance() {
+    public static ItemTable getInstance() {
         return ItemListHolder.INSTANCE;
     }
 
-    public ItemEntity addItem(String isbn) {
+    public ItemEntity addItem(String isbn) throws NoSuchISBNExistsException {
         if (!TitleTable.getInstance().lookup(title -> title.getISBN().equals(isbn)).isPresent()) {
             logger.info(String.format("Operation:Create New Item;Item Info:[%s,%s];State:Fail;Reason:No such ISBN existed.", isbn, "N/A"));
-            return null;
+            throw new NoSuchISBNExistsException();
         }
 
         String copyNumber = String.valueOf(itemList

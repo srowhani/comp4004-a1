@@ -1,5 +1,6 @@
 package main.java.server.io.dao;
 
+import main.java.server.io.error.PendingLoansExistException;
 import main.java.server.io.model.FeeEntity;
 import main.java.server.io.model.LoanEntity;
 import main.java.util.Config;
@@ -11,6 +12,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class FeeTable {
     private Logger logger = Trace.getInstance().getLogger("operation_file");
@@ -34,7 +36,7 @@ public class FeeTable {
 
     ;
 
-    public static final FeeTable getInstance() {
+    public static FeeTable getInstance() {
         return FeeListHolder.INSTANCE;
     }
 
@@ -65,13 +67,11 @@ public class FeeTable {
     public int lookupFee(int userId) {
         int fee = 0;
 
-        int amountToPay = feeList
+        return feeList
                 .stream()
                 .filter(feeEntity -> feeEntity.getUserId() == userId)
                 .mapToInt(feeEntity -> feeEntity.getFee())
                 .sum();
-
-        return amountToPay;
     }
 
     public void applyFee(int id, long time) {
@@ -114,12 +114,14 @@ public class FeeTable {
         return feeList;
     }
 
-    public Object payFine(int userId) {
-        String result = "";
-        boolean oloan = LoanTable.getInstance().checkLoanByUserId(userId);
+    public void payFine(int userId) throws PendingLoansExistException {
+        if (LoanTable.getInstance().checkLoanByUserId(userId)) {
+            throw new PendingLoansExistException();
+        }
         int fee = 0;
         int index = 0;
         boolean user = FeeTable.getInstance().checkuser(userId);
+
         if (user) {
             for (int m = 0; m < feeList.size(); m++) {
                 if (feeList.get(m).getUserId() == userId) {
@@ -132,15 +134,9 @@ public class FeeTable {
         } else {
             fee = 0;
         }
-        if (oloan == false) {
-            result = "Borrowing Items Exist";
-            logger.info(String.format("Operation:Pay Fine;Fee Info:[%d,%d];State:Fail;Reason:Borrowing Items Exist.", userId, fee));
-        } else {
-            feeList.get(index).setFee(0);
-            result = "success";
-            logger.info(String.format("Operation:Pay Fine;Fee Info:[%d,%d];State:Success", userId, fee));
-        }
-        return result;
+
+        feeList.get(index).setFee(0);
+        logger.info(String.format("Operation:Pay Fine;Fee Info:[%d,%d];State:Success", userId, fee));
     }
 
 

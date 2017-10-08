@@ -1,9 +1,6 @@
 package main.java.server.io.dao;
 
-import main.java.server.io.error.InvalidUserCredentialsException;
-import main.java.server.io.error.LoanExistsException;
-import main.java.server.io.error.OutstandingFeeExistsException;
-import main.java.server.io.error.UserEntityNotFoundException;
+import main.java.server.io.error.*;
 import main.java.server.io.model.FeeEntity;
 import main.java.server.io.model.LoanEntity;
 import main.java.server.io.model.UserEntity;
@@ -29,21 +26,25 @@ public class UserTable {
         String[] usernameList = new String[]{"Zhibo@carleton.ca", "Yu@carleton.ca", "Michelle@carleton.ca", "Kevin@carleton.ca", "Sun@carleton.ca"};
 
         for (int i = 0; i < usernameList.length; i++) {
-            add(usernameList[i], passwordList[i]);
+            try {
+                add(usernameList[i], passwordList[i]);
+            } catch (UserEntityExistsException e) {
+                logger.error(e.getMessage());
+            }
         }
         logger.info(String.format("Operation:Initialize UserTable;UserTable: %s", userList));
     }
 
     ;
 
-    public static final UserTable getInstance() {
+    public static UserTable getInstance() {
         return UserListHolder.INSTANCE;
     }
 
-    public UserEntity add(String username, String password) {
+    public UserEntity add(String username, String password) throws UserEntityExistsException {
         if (userList.stream().anyMatch(user -> user.getUsername().equals(username))) {
             logger.info(String.format("Operation:Create New User;User Info:[%s,%s];State:Fail;Reason:The User already existed.", username, password));
-            return null;
+            throw new UserEntityExistsException();
         }
         UserEntity userEntity = new UserEntity(numUsers++, username, password);
 
