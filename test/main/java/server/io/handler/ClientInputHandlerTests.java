@@ -16,9 +16,7 @@ import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
-import static junit.framework.TestCase.assertNotNull;
 import static junit.framework.TestCase.assertTrue;
-import static main.java.server.io.handler.model.ClientState.PAYFINE;
 import static org.apache.log4j.helpers.LogLog.warn;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -56,20 +54,24 @@ public class ClientInputHandlerTests {
     }
     @Test
     public void borrowBook() {
-        loginAsUser();
+        String username = "book-test-user";
+        String password = "password";
+        String isbn = "1234567890139";
+        clientInputHandler.createUser(String.format("%s,%s", username, password));
+
         TitleEntity titleEntity;
         try {
-            titleEntity = TitleTable.getInstance().createTitle("1234567890139", "Foobar: The return of the baz");
+            titleEntity = TitleTable.getInstance().createTitle(isbn, "Foobar: The return of the baz");
             try {
                 ItemTable.getInstance().addItem(titleEntity.getISBN());
-                ServerOutput serverOutput = clientInputHandler.borrowBook(titleEntity.getISBN());
-                assertNotNull(serverOutput);
+                ServerOutput serverOutput = clientInputHandler.borrowBook(String.format("%s,%s,%s", username, isbn, "0"));
+                assertEquals(serverOutput.getOutput(), "Success!");
             } catch (NoSuchISBNExistsException e) {
                 fail(e.getMessage());
             }
 
         } catch (TitleEntityExistsException e) {
-            fail(e.getMessage());
+            warn(e.getMessage());
         }
     }
 
@@ -105,7 +107,11 @@ public class ClientInputHandlerTests {
 
     @Test
     public void returnBookTest () {
-        fail("not yet implemented");
+        String username = "book-test-user";
+        String isbn = "1234567890139";
+        borrowBook();
+        ServerOutput serverOutput = clientInputHandler.returnBook(String.format("%s,%s,%s", username, isbn, "0"));
+        assertEquals(serverOutput.getOutput(), "Success!");
     }
 
     @Test
