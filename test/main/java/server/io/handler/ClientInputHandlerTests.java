@@ -28,6 +28,8 @@ public class ClientInputHandlerTests {
 
     @Before
     public void setup () {
+        UserTable.getInstance().getUserTable().clear();
+        TitleTable.getInstance().getTitleTable().clear();
         if (clientInputHandler == null) {
             assertDoesNotThrow(() -> clientInputHandler = new ClientInputHandler());
         }
@@ -85,15 +87,20 @@ public class ClientInputHandlerTests {
 
     @Test
     public void createTitleTest () {
-//        clientInputHandler.createTitle();
-
-        fail("Not yet implemented");
+        String isbn = "1928374655463";
+        String bookTitle = "Timothy goes to school";
+        ServerOutput serverOutput = clientInputHandler.createTitle(String.format("%s,%s", isbn, bookTitle));
+        assertEquals(serverOutput.getOutput(), "Success!");
+        assertEquals(serverOutput.getState(), ClientState.CLERK);
     }
 
     @Test
     public void deleteTitleTest () {
-//        clientInputHandler.deleteTitle();
-        fail("not yet impl");
+        String isbn = "1928374655463";
+        createTitleTest();
+        ServerOutput serverOutput = clientInputHandler.deleteTitle(isbn);
+        assertEquals(serverOutput.getOutput(), "Success!");
+        assertEquals(serverOutput.getState(), ClientState.CLERK);
     }
 
     @Test

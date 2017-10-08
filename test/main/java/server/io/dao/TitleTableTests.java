@@ -1,5 +1,7 @@
 package main.java.server.io.dao;
 
+import main.java.server.io.error.TitleEntityAlreadyExistsException;
+import main.java.server.io.error.TitleEntityNotFoundException;
 import main.java.server.io.model.TitleEntity;
 import org.junit.Test;
 
@@ -8,6 +10,7 @@ import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static util.Assert.assertDoesNotThrow;
 
 public class TitleTableTests {
@@ -21,7 +24,11 @@ public class TitleTableTests {
         TitleTable titleTable = TitleTable.getInstance();
         String isbn = "ISBN";
         String title = "Book title";
-        titleTable.createTitle(isbn, title);
+        try {
+            titleTable.createTitle(isbn, title);
+        } catch (TitleEntityAlreadyExistsException e) {
+            fail(e.getMessage());
+        }
 
         assertTrue(titleTable.getTitleTable().stream().anyMatch(item ->
                 item.getISBN().equals(isbn) && item.getBooktitle().equals(title)
@@ -37,7 +44,13 @@ public class TitleTableTests {
                 .stream()
                 .map(u -> u.getISBN())
                 .collect(Collectors.toList())
-                .forEach(id -> titleTable.remove(id));
+                .forEach(id -> {
+                    try {
+                        titleTable.remove(id);
+                    } catch (TitleEntityNotFoundException e) {
+                        fail(e.getMessage());
+                    }
+                });
 
         assertEquals(titleTable.getTitleTable().size(), 0);
     }
