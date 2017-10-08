@@ -1,5 +1,7 @@
 package main.java.server.io.dao;
 
+import main.java.server.io.error.PendingLoansExistException;
+import main.java.server.io.error.UserEntityExistsException;
 import main.java.server.io.model.UserEntity;
 import main.java.util.Config;
 import org.junit.Before;
@@ -8,6 +10,7 @@ import org.junit.Test;
 import java.util.Optional;
 
 import static junit.framework.TestCase.assertTrue;
+import static org.apache.log4j.helpers.LogLog.warn;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static util.Assert.assertDoesNotThrow;
@@ -20,7 +23,7 @@ public class FeeTableTests {
     public void setup() {
         feeTable = FeeTable.getInstance();
         feeTable.getFeeTable().clear();
-
+        UserTable.getInstance().getUserTable().clear();
     }
 
     @Test
@@ -30,10 +33,14 @@ public class FeeTableTests {
 
     @Test
     public void lookupExistingItemReturnsPresentOptional() {
-        Optional<UserEntity> existingUser = UserTable.getInstance().getUserTable().stream().findAny();
-        assertTrue(existingUser.isPresent());
+        UserEntity userEntity = null;
+        try {
+            userEntity = UserTable.getInstance().add("test-user", "password");
+        } catch (UserEntityExistsException e) {
+            userEntity = UserTable.getInstance().lookup(user -> user.getUsername().equals("test-user")).get();
+        }
         int daysOverDue = 3;
-        feeTable.applyFee(existingUser.get().getId(), Config.SIMULATED_DAY * (Config.OVERDUE + daysOverDue));
+        feeTable.applyFee(userEntity.getId(), Config.SIMULATED_DAY * (Config.OVERDUE + daysOverDue));
 
         assertTrue(feeTable.lookup(feeEntity -> feeEntity.getFee() == daysOverDue).isPresent());
     }
@@ -45,13 +52,15 @@ public class FeeTableTests {
 
     @Test
     public void applyFeeAddsFeeToUserCorrectly() {
-
-        Optional<UserEntity> existingUser = UserTable.getInstance().getUserTable().stream().findFirst();
-
-        assertTrue(existingUser.isPresent());
+        UserEntity userEntity = null;
+        try {
+            userEntity = UserTable.getInstance().add("test-user", "password");
+        } catch (UserEntityExistsException e) {
+            userEntity = UserTable.getInstance().lookup(user -> user.getUsername().equals("test-user")).get();
+        }
         int daysOverDue = 3;
 
-        int id = existingUser.get().getId();
+        int id = userEntity.getId();
         feeTable.applyFee(id, Config.SIMULATED_DAY * (Config.OVERDUE + daysOverDue));
 
         assertEquals(daysOverDue, feeTable.lookupFee(id));
@@ -59,14 +68,22 @@ public class FeeTableTests {
 
     @Test
     public void payFineAdjustsAmountOwedCorrectly() {
-        Optional<UserEntity> existingUser = UserTable.getInstance().getUserTable().stream().findFirst();
-        assertTrue(existingUser.isPresent());
+        UserEntity userEntity = null;
+        try {
+            userEntity = UserTable.getInstance().add("test-user", "password");
+        } catch (UserEntityExistsException e) {
+            userEntity = UserTable.getInstance().lookup(user -> user.getUsername().equals("test-user")).get();
+        }
 
         applyFeeAddsFeeToUserCorrectly();
 
-        feeTable.payFine(existingUser.get().getId());
+        try {
+            feeTable.payFine(userEntity.getId());
+        } catch (PendingLoansExistException e) {
+            warn(e.getMessage());
+        }
 
-        assertEquals(0, feeTable.lookupFee(existingUser.get().getId()));
+        assertEquals(0, feeTable.lookupFee(userEntity.getId()));
         assertEquals(0, feeTable.lookupFee(123));
 
     }

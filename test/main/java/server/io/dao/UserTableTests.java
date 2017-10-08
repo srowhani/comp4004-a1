@@ -1,16 +1,14 @@
 package main.java.server.io.dao;
 
-import main.java.server.io.error.LoanExistsException;
-import main.java.server.io.error.OutstandingFeeExistsException;
-import main.java.server.io.error.UserEntityNotFoundException;
+import main.java.server.io.error.UserEntityExistsException;
 import main.java.server.io.model.UserEntity;
 import org.junit.Test;
 
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.apache.log4j.helpers.LogLog.warn;
+import static org.junit.Assert.*;
 import static util.Assert.assertDoesNotThrow;
 
 public class UserTableTests {
@@ -24,7 +22,11 @@ public class UserTableTests {
         UserTable userTable = UserTable.getInstance();
         String username = "username";
         String password = "password";
-        userTable.add(username, password);
+        try {
+            userTable.add(username, password);
+        } catch (UserEntityExistsException e) {
+            warn(e.getMessage());
+        }
 
         assertTrue(userTable.getUserTable().stream().anyMatch(item ->
                 item.getUsername().equals(username) && item.getPassword().equals(password)
@@ -42,8 +44,12 @@ public class UserTableTests {
                 .collect(Collectors.toList())
                 .forEach(id -> {
                     try {
+                        FeeTable.getInstance().payFine(id);
+                        // TODO: Fix loantable pay loan
                         userTable.remove(id);
-                    } catch (Exception e) {}
+                    } catch (Exception e) {
+                        warn(e.getMessage());
+                    }
                 });
 
         assertEquals(userTable.getUserTable().size(), 0);
@@ -60,7 +66,7 @@ public class UserTableTests {
         assertTrue(userEntityOptional.isPresent());
         assertEquals(userEntityOptional.get(), userEntity);
 
-        userEntityOptional = userTable.lookup(user -> user.getUsername() == userEntity.getUsername());
+        userEntityOptional = userTable.lookup(user -> user.getUsername().equals(userEntity.getUsername()));
         assertTrue(userEntityOptional.isPresent());
         assertEquals(userEntityOptional.get(), userEntity);
     }

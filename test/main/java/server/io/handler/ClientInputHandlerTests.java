@@ -6,19 +6,14 @@ import main.java.server.io.dao.UserTable;
 import main.java.server.io.handler.model.ClientState;
 import main.java.server.io.handler.model.ServerOutput;
 import main.java.server.io.model.TitleEntity;
-import main.java.server.io.model.UserEntity;
 import main.java.util.Config;
-import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.util.Date;
 import java.util.UUID;
 
 import static junit.framework.TestCase.assertNotNull;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static util.Assert.assertDoesNotThrow;
 

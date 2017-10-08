@@ -1,6 +1,6 @@
 package main.java.server.io.dao;
 
-import main.java.server.io.error.TitleEntityAlreadyExistsException;
+import main.java.server.io.error.TitleEntityExistsException;
 import main.java.server.io.error.TitleEntityNotFoundException;
 import main.java.server.io.model.TitleEntity;
 import org.junit.Test;
@@ -8,9 +8,7 @@ import org.junit.Test;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 import static util.Assert.assertDoesNotThrow;
 
 public class TitleTableTests {
@@ -26,7 +24,7 @@ public class TitleTableTests {
         String title = "Book title";
         try {
             titleTable.createTitle(isbn, title);
-        } catch (TitleEntityAlreadyExistsException e) {
+        } catch (TitleEntityExistsException e) {
             fail(e.getMessage());
         }
 
@@ -62,11 +60,11 @@ public class TitleTableTests {
 
         TitleEntity titleEntity = titleTable.getTitleTable().get(0);
 
-        Optional<TitleEntity> titleEntityOptional = titleTable.lookup(title -> title.getISBN() == titleEntity.getISBN());
+        Optional<TitleEntity> titleEntityOptional = titleTable.lookup(title -> title.getISBN().equals(titleEntity.getISBN()));
         assertTrue(titleEntityOptional.isPresent());
         assertEquals(titleEntityOptional.get(), titleEntity);
 
-        titleEntityOptional = titleTable.lookup(title -> title.getBooktitle() == titleEntity.getBooktitle());
+        titleEntityOptional = titleTable.lookup(title -> title.getBooktitle().equals(titleEntity.getBooktitle()));
         assertTrue(titleEntityOptional.isPresent());
         assertEquals(titleEntityOptional.get(), titleEntity);
     }
