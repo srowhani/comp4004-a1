@@ -1,7 +1,6 @@
 package main.java.server.io.dao;
 
-import main.java.server.io.error.NoSuchLoanExistsException;
-import main.java.server.io.error.UserEntityExistsException;
+import main.java.server.io.error.*;
 import main.java.server.io.model.UserEntity;
 import org.junit.Test;
 
@@ -45,22 +44,30 @@ public class UserTableTests {
                 .map(u -> u.getId())
                 .collect(Collectors.toList())
                 .forEach(id -> {
-                    try {
-                        LoanTable.getInstance().getLoanTable().stream().collect(Collectors.toList()).forEach(loanEntity -> {
-                            if (loanEntity.getUserId() == id) {
-                                try {
-                                    LoanTable.getInstance().returnItem(loanEntity.getUserId(), loanEntity.getISBN(), loanEntity.getCopyNumber(), new Date());
-                                } catch (NoSuchLoanExistsException e) {
-                                    warn(e.getMessage());
-                                }
+                    LoanTable.getInstance().getLoanTable().stream().collect(Collectors.toList()).forEach(loanEntity -> {
+                        if (loanEntity.getUserId() == id) {
+                            try {
+                                LoanTable.getInstance().returnItem(loanEntity.getUserId(), loanEntity.getISBN(), loanEntity.getCopyNumber(), new Date());
+                            } catch (NoSuchLoanExistsException e) {
+                                warn(e.getMessage());
                             }
-                        });
+                        }
+                    });
+                    try {
                         FeeTable.getInstance().payFine(id);
+                    } catch (PendingLoansExistException e) {
+                        e.printStackTrace();
+                    }
 
-                        // TODO: Fix loantable pay loan
+                    // TODO: Fix loantable pay loan
+                    try {
                         userTable.remove(id);
-                    } catch (Exception e) {
-                        warn(e.getMessage());
+                    } catch (UserEntityNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (OutstandingFeeExistsException e) {
+                        e.printStackTrace();
+                    } catch (LoanExistsException e) {
+                        e.printStackTrace();
                     }
                 });
 

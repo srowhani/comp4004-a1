@@ -3,6 +3,7 @@ package main.java.server.io.dao;
 import main.java.server.io.error.ItemEntityNotFoundException;
 import main.java.server.io.error.LoanExistsException;
 import main.java.server.io.error.NoSuchISBNExistsException;
+import main.java.server.io.error.TitleEntityExistsException;
 import main.java.server.io.model.ItemEntity;
 import org.junit.Test;
 
@@ -23,6 +24,13 @@ public class ItemTableTests {
         ItemTable itemTable = ItemTable.getInstance();
         String isbn = "9781442668584";
         itemTable.getItemTable().clear();
+
+        try {
+            TitleTable.getInstance().createTitle(isbn, "Foobar: Return of the bar");
+        } catch (TitleEntityExistsException e) {
+            warn(e.getMessage());
+        }
+
         try {
             itemTable.addItem(isbn);
         } catch (NoSuchISBNExistsException e) {
