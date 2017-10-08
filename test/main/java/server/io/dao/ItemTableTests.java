@@ -2,11 +2,13 @@ package main.java.server.io.dao;
 
 import main.java.server.io.error.ItemEntityNotFoundException;
 import main.java.server.io.error.LoanExistsException;
+import main.java.server.io.error.NoSuchISBNExistsException;
 import main.java.server.io.model.ItemEntity;
 import org.junit.Test;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.fail;
 import static util.Assert.assertDoesNotThrow;
 
 public class ItemTableTests {
@@ -20,7 +22,11 @@ public class ItemTableTests {
         ItemTable itemTable = ItemTable.getInstance();
         String isbn = "9781442668584";
         itemTable.getItemTable().clear();
-        itemTable.addItem(isbn);
+        try {
+            itemTable.addItem(isbn);
+        } catch (NoSuchISBNExistsException e) {
+            fail(e.getMessage());
+        }
 
         assertTrue(TitleTable.getInstance().lookup(title -> title.getISBN().equals(isbn)).isPresent());
         assertTrue(itemTable.lookup(item -> item.getISBN().equals(isbn)).isPresent());

@@ -1,5 +1,6 @@
 package main.java.server.io.handler;
 
+import main.java.server.io.dao.ItemTable;
 import main.java.server.io.dao.TitleTable;
 import main.java.server.io.dao.UserTable;
 import main.java.server.io.handler.model.ClientState;
@@ -30,6 +31,7 @@ public class ClientInputHandlerTests {
     public void setup () {
         UserTable.getInstance().getUserTable().clear();
         TitleTable.getInstance().getTitleTable().clear();
+        ItemTable.getInstance().getItemTable().clear();
         if (clientInputHandler == null) {
             assertDoesNotThrow(() -> clientInputHandler = new ClientInputHandler());
         }
@@ -74,15 +76,27 @@ public class ClientInputHandlerTests {
 
     @Test
     public void createItemTest () {
-//        clientInputHandler.createItem();
+        String isbn = "1928374655463";
+        if (!TitleTable.getInstance().lookup(titleEntity -> titleEntity.getISBN().equals(isbn)).isPresent()) {
+            createTitleTest();
+        }
 
-        fail("Not yet implemented");
+        ServerOutput serverOutput = clientInputHandler.createItem(isbn);
+        assertEquals(serverOutput.getOutput(), "Success!");
     }
 
     @Test
     public void deleteItemTest () {
-//        clientInputHandler.deleteItem();
-        fail("not yet impl");
+        String isbn = "1928374655463";
+
+        createItemTest();
+        createItemTest();
+
+        ServerOutput serverOutput = clientInputHandler.deleteItem(String.format("%s,%s", isbn, "0"));
+        assertEquals(serverOutput.getOutput(), "Success!");
+        serverOutput = clientInputHandler.deleteItem(String.format("%s,%s", isbn, "1"));
+        assertEquals(serverOutput.getOutput(), "Success!");
+
     }
 
     @Test
