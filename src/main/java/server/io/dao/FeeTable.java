@@ -116,8 +116,10 @@ public class FeeTable {
         if (LoanTable.getInstance().checkLoanByUserId(userId)) {
             throw new PendingLoansExistException();
         }
+
         int fee = 0;
         int index = 0;
+
         boolean user = FeeTable.getInstance().checkuser(userId);
 
         if (user) {
@@ -129,13 +131,8 @@ public class FeeTable {
                     fee = 0;
                 }
             }
-        } else {
-            fee = 0;
+            feeList.get(index).setFee(0);
+            logger.info(String.format("Operation:Pay Fine;Fee Info:[%d,%d];State:Success", userId, fee));
         }
-
-        feeList.get(index).setFee(0);
-        logger.info(String.format("Operation:Pay Fine;Fee Info:[%d,%d];State:Success", userId, fee));
     }
-
-
 }

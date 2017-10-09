@@ -27,11 +27,11 @@ public class LibClient implements Runnable {
     public LibClient(String serverName, int serverPort) {
         System.out.println("Connecting to the server. Please wait ...");
         try {
-            this.socket = new Socket(serverName, serverPort);
-            this.ID = socket.getLocalPort();
+            socket = new Socket(serverName, serverPort);
+            ID = socket.getLocalPort();
             logger.info(String.format("%d : Connected to server: %s", ID, socket.getInetAddress()));
             logger.info(String.format("%d : Connected to portid: %s", ID, socket.getLocalPort()));
-            this.start();
+            this.start(socket);
             System.out.println("Welcome To Zhibo's Library!");
             System.out.println("Greeting To Start!");
         } catch (UnknownHostException uhe) {
