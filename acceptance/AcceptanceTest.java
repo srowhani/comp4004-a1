@@ -23,4 +23,8 @@ public class AcceptanceTest {
     public CompletableFuture<ServerOutput> input(String input, ClientState state) {
         return CompletableFuture.completedFuture(clientInputReader.processInput(input, state));
     }
+
+    public ServerOutput now(CompletableFuture<ServerOutput> serverOutputCompletableFuture) {
+        return serverOutputCompletableFuture.getNow(null);
+    }
 }

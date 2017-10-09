@@ -21,7 +21,7 @@ public class AddItemStoryTests extends AcceptanceTest {
             .thenApply(output -> {
                 assertEquals("Please Input Item Info:'ISBN'", output.getOutput());
                 assertEquals(ClientState.CREATEITEM, output.getState());
-                return input("9781442668584", output.getState()).getNow(null);
+                return now(input("9781442668584", output.getState()));
             }).thenAccept(output -> {
                 assertEquals("Success!", output.getOutput());
                 assertEquals(ClientState.CLERK, output.getState());
@@ -31,13 +31,21 @@ public class AddItemStoryTests extends AcceptanceTest {
     @Test
     public void addItemTitleDoesntExist() throws ExecutionException, InterruptedException {
         input("create item", ClientState.CLERK)
-        .thenApply(output -> {
-            assertEquals("Please Input Item Info:'ISBN'", output.getOutput());
-            assertEquals(ClientState.CREATEITEM, output.getState());
-            return input("1234567891035", output.getState()).getNow(null);
-        }).thenAccept(output -> {
-            assertEquals("The Title Does Not Exists! Would you like to add it?", output.getOutput());
-            assertEquals(ClientState.CLERK, output.getState());
-        }).get();
+            .thenApply(output -> {
+                assertEquals("Please Input Item Info:'ISBN'", output.getOutput());
+                assertEquals(ClientState.CREATEITEM, output.getState());
+                return now(input("1234567891035", output.getState()));
+            }).thenApply(output -> {
+                assertEquals("The Title Does Not Exists! Would you like to add it? (y/n)", output.getOutput());
+                assertEquals(ClientState.CONFIRM_ADD_TITLE, output.getState());
+                return now(input("y", output.getState()));
+            }).thenApply(output -> {
+                assertEquals("Confirmed!", output.getOutput());
+                assertEquals(ClientState.CREATETITLE, output.getState());
+                return now(input("1234567891035,Timothy Goes To Hell", output.getState()));
+            }).thenAccept(output -> {
+                assertEquals("Success!", output.getOutput());
+                assertEquals(ClientState.CLERK, output.getState());
+            });
     }
 }
