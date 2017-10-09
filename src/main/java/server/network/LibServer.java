@@ -1,6 +1,7 @@
 package main.java.server.network;
 
 import main.java.server.io.dao.*;
+import main.java.server.io.handler.ClientInputHandler;
 import main.java.server.io.handler.ClientInputReader;
 import main.java.server.io.handler.model.Client;
 import main.java.server.io.handler.model.ClientState;
@@ -24,10 +25,11 @@ public class LibServer implements Runnable {
     private ServerSocket server = null;
     private HashMap<Integer, ServerThread> clients;
     private Logger logger = Trace.getInstance().getLogger(this);
-    ClientInputReader clientInputReader = new ClientInputReader();
+    ClientInputReader clientInputReader;
     private List<Client> clientList = new ArrayList<Client>();
 
     public LibServer(int port) {
+        clientInputReader = new ClientInputReader().pipe(new ClientInputHandler());
         try {
             logger.info("Binding to port " + port);
             clients = new HashMap<Integer, ServerThread>();
@@ -86,6 +88,7 @@ public class LibServer implements Runnable {
     }
 
     public synchronized void handle(int ID, String input) {
+
         if (input.equals("Exit")) {
             logger.info(String.format("Client: %d Exits", ID));
             if (clients.containsKey(ID)) {

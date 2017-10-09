@@ -12,7 +12,7 @@ public class Trace {
 
     private Trace() {
         String userDir = System.getProperty("user.dir");
-        System.out.println(userDir);
+
         String configFile = String.format("%s/%s/%s.properties", userDir, "src/main/resources", "log4j");
         PropertyConfigurator.configure(configFile);
     }
