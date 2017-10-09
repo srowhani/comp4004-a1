@@ -112,7 +112,6 @@ public class ClientInputHandler {
             try {
                 ItemTable.getInstance().addItem(strArray[0]);
                 output.setOutput("Success!");
-
             } catch (NoSuchISBNExistsException e) {
                 output.setOutput("The Title Does Not Exists!");
             }
