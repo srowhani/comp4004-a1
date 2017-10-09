@@ -140,6 +140,14 @@ public class ClientInputReader {
             } else {
                 serverOutput = clientInputHandler.createTitle(input);
             }
+        } else if (state == CONFIRM_ADD_TITLE) {
+            if (input.equalsIgnoreCase("y")) {
+                serverOutput.setOutput("Confirmed!");
+                serverOutput.setState(CREATETITLE);
+            } else {
+                serverOutput.setOutput("Returning to clerk menu");
+                serverOutput.setState(CLERK);
+            }
         } else if (state == CREATEITEM) {
             if (input.equalsIgnoreCase("log out")) {
                 output = "Successfully Log Out!";
