@@ -1,3 +1,7 @@
+import main.java.server.io.dao.FeeTable;
+import main.java.server.io.dao.ItemTable;
+import main.java.server.io.dao.LoanTable;
+import main.java.server.io.dao.UserTable;
 import main.java.server.io.handler.ClientInputHandler;
 import main.java.server.io.handler.ClientInputReader;
 import main.java.server.io.handler.model.ClientState;
@@ -5,11 +9,12 @@ import main.java.server.io.handler.model.ServerOutput;
 import main.java.util.Config;
 import main.java.util.Trace;
 import org.apache.log4j.Logger;
+import org.junit.After;
+import org.junit.Before;
 
 import java.util.concurrent.CompletableFuture;
 
 import static main.java.server.io.handler.model.ClientState.FINISHWAITING;
-import static main.java.server.io.handler.model.ClientState.WAITING;
 
 public class AcceptanceTest {
     private Logger logger = Trace.getInstance().getLogger("operation_file");

@@ -15,7 +15,7 @@ public class AddUserStoryTests extends AcceptanceTest {
         .thenApply(output -> {
             assertEquals("Please Input User Info:'username,password'", output.getOutput());
             assertEquals(CREATEUSER, output.getState());
-            return now(input("test-user-123,test-password-123", output.getState()));
+            return now(input("test-user-12345,test-password-12345", output.getState()));
         })
         .thenAccept(output -> {
             assertEquals("Success!", output.getOutput());
