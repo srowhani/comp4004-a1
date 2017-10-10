@@ -15,6 +15,7 @@ import org.junit.Before;
 import java.util.concurrent.CompletableFuture;
 
 import static main.java.server.io.handler.model.ClientState.FINISHWAITING;
+import static org.junit.Assert.assertEquals;
 
 public class AcceptanceTest {
     private Logger logger = Trace.getInstance().getLogger("operation_file");
@@ -40,5 +41,9 @@ public class AcceptanceTest {
     public CompletableFuture<ServerOutput> clerkLogin () {
         return input("Clerk", FINISHWAITING)
             .thenApply(output -> now(input(Config.CLERK_PASSWORD, output.getState())));
+    }
+
+    public void assertSuccess(ServerOutput s) {
+        assertEquals("Success!", s.getOutput());
     }
 }

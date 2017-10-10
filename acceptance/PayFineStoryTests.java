@@ -67,6 +67,5 @@ public class PayFineStoryTests extends AcceptanceTest {
         .thenAccept(borrowResultOutput -> {
             assertEquals("Success!", borrowResultOutput.getOutput());
         }).get();
-
     }
 }
