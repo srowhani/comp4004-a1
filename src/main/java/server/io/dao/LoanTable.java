@@ -174,7 +174,7 @@ public class LoanTable {
     }
 
     /**
-     * If loan matches given predicate, return false
+     * If loan matches given predicate, return true
      *
      * @param loanEntityPredicate
      * @return

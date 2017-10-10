@@ -1,5 +1,6 @@
 package main.java.server.io.dao;
 
+import main.java.server.io.error.LoanExistsException;
 import main.java.server.io.error.TitleEntityExistsException;
 import main.java.server.io.error.TitleEntityNotFoundException;
 import main.java.server.io.model.TitleEntity;
@@ -56,11 +57,15 @@ public class TitleTable {
                 .findFirst();
     }
 
-    public TitleEntity remove(String isbn) throws TitleEntityNotFoundException {
+    public TitleEntity remove(String isbn) throws TitleEntityNotFoundException, LoanExistsException {
         Optional<TitleEntity> title = titleList
                 .stream()
                 .filter(userEntity -> userEntity.getISBN().equals(isbn))
                 .findFirst();
+
+        if (LoanTable.getInstance().checkLoan(l -> l.getISBN().equals(isbn))) {
+            throw new LoanExistsException();
+        }
 
         if (!title.isPresent()) {
             throw new TitleEntityNotFoundException();

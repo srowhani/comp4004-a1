@@ -1,5 +1,6 @@
 package main.java.server.io.dao;
 
+import main.java.server.io.error.LoanExistsException;
 import main.java.server.io.error.TitleEntityExistsException;
 import main.java.server.io.error.TitleEntityNotFoundException;
 import main.java.server.io.model.TitleEntity;
@@ -46,6 +47,8 @@ public class TitleTableTests {
                     try {
                         titleTable.remove(id);
                     } catch (TitleEntityNotFoundException e) {
+                        fail(e.getMessage());
+                    } catch (LoanExistsException e) {
                         fail(e.getMessage());
                     }
                 });
