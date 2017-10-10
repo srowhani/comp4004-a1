@@ -58,6 +58,11 @@ public class ClientInputReader {
                 state = DELETEITEM;
                 serverOutput.setOutput(output);
                 serverOutput.setState(state);
+            } else if (input.equalsIgnoreCase("borrow")) {
+                output = "Please Input User Info:'useremail,ISBN,copynumber'";
+                state = BORROW_AS_CLERK;
+                serverOutput.setOutput(output);
+                serverOutput.setState(state);
             } else if (input.equalsIgnoreCase("log out")) {
                 output = "Successfully Log Out!";
                 state = WAITING;
@@ -217,6 +222,15 @@ public class ClientInputReader {
                 serverOutput.setState(state);
             } else {
                 serverOutput = clientInputHandler.borrowBook(input);
+            }
+        } else if (state == BORROW_AS_CLERK) {
+            if (input.equalsIgnoreCase("log out")) {
+                output = "Successfully Log Out!";
+                state = WAITING;
+                serverOutput.setOutput(output);
+                serverOutput.setState(state);
+            } else {
+                serverOutput = clientInputHandler.borrowBookAsClerk(input);
             }
         } else if (state == RENEW) {
             if (input.equalsIgnoreCase("log out")) {

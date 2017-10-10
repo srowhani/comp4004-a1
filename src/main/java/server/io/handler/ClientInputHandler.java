@@ -222,6 +222,37 @@ public class ClientInputHandler {
         return output;
     }
 
+    public ServerOutput borrowBookAsClerk(String csvUsernameIsbnCopyNumber) {
+        ServerOutput output = new ServerOutput();
+        String[] strArray = csvUsernameIsbnCopyNumber.split(",");
+        Optional<UserEntity> userEntityOptional = UserTable.getInstance().lookup(
+                user -> user.getUsername().equals(strArray[0]));
+        Object result = "";
+        if (strArray.length != 3) {
+            output.setOutput("Your input should in this format:'useremail,ISBN,copynumber'");
+            output.setState(BORROW);
+        } else if (!userEntityOptional.isPresent()) {
+            output.setOutput("The User Does Not Exist!");
+            output.setState(BORROW);
+        } else {
+            boolean ISBN = isInteger(strArray[1]);
+            boolean copynumber = isNumber(strArray[2]);
+            if (!ISBN || !copynumber) {
+                output.setOutput("Your input should in this format:'useremail,ISBN,copynumber'");
+                output.setState(BORROW);
+            } else {
+                try {
+                    LoanTable.getInstance().createLoan(userEntityOptional.get().getId(), strArray[1], strArray[2], new Date());
+                    output.setOutput("Success!");
+                } catch (Exception e) {
+                    output.setOutput(e.getMessage());
+                }
+            }
+            output.setState(CLERK);
+        }
+        return output;
+    }
+
     public ServerOutput renewBook(String csvUsernameIsbnCopyNumber) {
         ServerOutput output = new ServerOutput();
         String[] strArray = csvUsernameIsbnCopyNumber.split(",");

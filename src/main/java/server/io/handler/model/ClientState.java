@@ -17,5 +17,5 @@ public enum ClientState {
     PAYFINE,
     CLERKLOGIN,
     USERLOGIN,
-    CONFIRM_ADD_TITLE
+    BORROW_AS_CLERK, CONFIRM_ADD_TITLE
 }
