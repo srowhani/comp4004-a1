@@ -11,7 +11,7 @@ import static org.junit.Assert.assertEquals;
 public class AddItemStoryTests extends AcceptanceTest {
     @Test
     public void addItemIfDoesntExist() throws ExecutionException, InterruptedException {
-        getLogger().info("Story Test: Add Item");
+       scenario("addItemIfDoesntExist");
         clerkLogin().thenApply(output -> now(input("create item", output.getState())))
                 .thenApply(output -> {
                     assertEquals("Please Input Item Info:'ISBN'", output.getOutput());
@@ -25,22 +25,23 @@ public class AddItemStoryTests extends AcceptanceTest {
 
     @Test
     public void addItemTitleDoesntExist() throws ExecutionException, InterruptedException {
-            clerkLogin().thenApply(output -> now(input("create item", output.getState())))
-            .thenApply(output -> {
-                assertEquals("Please Input Item Info:'ISBN'", output.getOutput());
-                assertEquals(ClientState.CREATEITEM, output.getState());
-                return now(input("1234567891035", output.getState()));
-            }).thenApply(output -> {
-                assertEquals("The Title Does Not Exists! Would you like to add it? (y/n)", output.getOutput());
-                assertEquals(ClientState.CONFIRM_ADD_TITLE, output.getState());
-                return now(input("y", output.getState()));
-            }).thenApply(output -> {
-                assertEquals("Confirmed!", output.getOutput());
-                assertEquals(ClientState.CREATETITLE, output.getState());
-                return now(input("1234567891035,Timothy Goes To Hell", output.getState()));
-            }).thenAccept(output -> {
-                assertEquals("Success!", output.getOutput());
-                assertEquals(ClientState.CLERK, output.getState());
-            });
+        scenario("addItemTitleDoesntExist");
+        clerkLogin().thenApply(output -> now(input("create item", output.getState())))
+        .thenApply(output -> {
+            assertEquals("Please Input Item Info:'ISBN'", output.getOutput());
+            assertEquals(ClientState.CREATEITEM, output.getState());
+            return now(input("1234567891035", output.getState()));
+        }).thenApply(output -> {
+            assertEquals("The Title Does Not Exists! Would you like to add it? (y/n)", output.getOutput());
+            assertEquals(ClientState.CONFIRM_ADD_TITLE, output.getState());
+            return now(input("y", output.getState()));
+        }).thenApply(output -> {
+            assertEquals("Confirmed!", output.getOutput());
+            assertEquals(ClientState.CREATETITLE, output.getState());
+            return now(input("1234567891035,Timothy Goes To Hell", output.getState()));
+        }).thenAccept(output -> {
+            assertEquals("Success!", output.getOutput());
+            assertEquals(ClientState.CLERK, output.getState());
+        });
     }
 }

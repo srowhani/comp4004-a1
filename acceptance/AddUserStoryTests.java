@@ -10,6 +10,7 @@ public class AddUserStoryTests extends AcceptanceTest {
     // If user doesn’t exist, user is added to the system.
     @Test
     public void addUserTest () throws ExecutionException, InterruptedException {
+        scenario("addUserTest");
         clerkLogin()
         .thenApply(output -> now(input("create user", output.getState())))
         .thenApply(output -> {
@@ -26,6 +27,7 @@ public class AddUserStoryTests extends AcceptanceTest {
     //    If user does exist, librarian won’t be allowed to add them.
     @Test
     public void addAlreadyExistingUserTest () throws ExecutionException, InterruptedException {
+        scenario("addAlreadyExistingUserTest");
         clerkLogin()
             .thenApply(output -> now(input("create user", output.getState())))
             .thenApply(output -> {

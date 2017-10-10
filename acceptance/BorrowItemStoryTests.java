@@ -8,10 +8,10 @@ import static main.java.server.io.handler.model.ClientState.CREATEUSER;
 import static org.junit.Assert.assertEquals;
 
 public class BorrowItemStoryTests extends AcceptanceTest {
-    //    If user is allowed, the loan is created to represent action of borrowing.
+    // If user is allowed, the loan is created to represent action of borrowing.
     @Test
     public void borrowItemIfUserIsAllowed () throws ExecutionException, InterruptedException {
-        String csvUsernameIsbnCopyNumber = "";
+        scenario("borrowItemIfUserIsAllowed");
         clerkLogin()
         .thenApply(output -> now(input("create user", output.getState())))
         .thenApply(output -> {

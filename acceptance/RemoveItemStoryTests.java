@@ -5,7 +5,6 @@ import org.junit.Test;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-import static main.java.server.io.handler.model.ClientState.CLERK;
 import static main.java.server.io.handler.model.ClientState.CREATEUSER;
 import static org.junit.Assert.assertEquals;
 
@@ -13,6 +12,7 @@ public class RemoveItemStoryTests extends AcceptanceTest {
     // Item cannot be accessed upon removal
     @Test
     public void itemAccessAfterRemoval () throws ExecutionException, InterruptedException {
+        scenario("itemAccessAfterRemoval");
         createItem("9781317594277")
         .thenApply(output -> now(input("delete item", output.getState())))
         .thenApply(output -> now(input("9781317594277,0", output.getState())))
@@ -29,6 +29,7 @@ public class RemoveItemStoryTests extends AcceptanceTest {
     // If item is being loaned, the librarian will not be allowed to remove.
     @Test
     public void itemCannotBeRemovedWhileLoaned () throws ExecutionException, InterruptedException {
+        scenario("itemCannotBeRemovedWhileLoaned");
         createItem("9781317594277").get();
         createUser("test-user-666", "pass").get();
 

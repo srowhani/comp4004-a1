@@ -8,6 +8,7 @@ import static org.junit.Assert.assertEquals;
 public class AddTitleStoryTests extends AcceptanceTest {
     @Test
     public void addsTitleIfDoesNotExist() throws ExecutionException, InterruptedException {
+        scenario("addsTitleIfDoesNotExist");
         clerkLogin().thenApply(o -> now(input("create title", o.getState())))
             .thenApply(output -> {
                 assertEquals("Please Input Title Info:'ISBN,title'", output.getOutput());
@@ -21,6 +22,7 @@ public class AddTitleStoryTests extends AcceptanceTest {
     // If matching title information exists, title will not be added.
     @Test
     public void matchingTitleDoesntAdd() throws ExecutionException, InterruptedException {
+        scenario("matchingTitleDoesntAdd");
         clerkLogin().thenApply(o -> now(input("create title", o.getState())))
             .thenApply(output -> {
                 assertEquals("Please Input Title Info:'ISBN,title'", output.getOutput());

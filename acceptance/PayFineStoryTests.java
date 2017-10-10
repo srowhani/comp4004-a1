@@ -10,6 +10,7 @@ public class PayFineStoryTests extends AcceptanceTest {
     // If user privilege is revoked, the user’s privileges is returned.
     @Test
     public void userPrivilege () throws ExecutionException, InterruptedException {
+        scenario("userPrivilege");
         // create user
         clerkLogin()
         .thenApply(clerkLoginOutput -> now(input("create user", clerkLoginOutput.getState())))
@@ -43,6 +44,7 @@ public class PayFineStoryTests extends AcceptanceTest {
 
     @Test
     public void userAllowedToBorrowItemsAfterPayingFine () throws ExecutionException, InterruptedException {
+        scenario("userAllowedToBorrowItemsAfterPayingFine");
         clerkLogin()
         .thenApply(clerkLoginOutput -> now(input("create user", clerkLoginOutput.getState())))
         .thenApply(beginCreateUser -> now(input("test-user-99999,pass", beginCreateUser.getState())))
