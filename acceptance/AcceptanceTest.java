@@ -103,4 +103,14 @@ public class AcceptanceTest {
         return input("borrow", ClientState.USER)
         .thenApply(r -> now(input(String.format("%s,%s,%s", username, isbn, copyNumber), r.getState())));
     }
+
+    public CompletableFuture<ServerOutput> returnItemLater (String username, String isbn, String copyNumber, int daysLater) throws ExecutionException, InterruptedException {
+        return input("return", ClientState.USER)
+        .thenApply(r -> now(input(String.format("%s,%s,%s,%d", username, isbn, copyNumber, daysLater), r.getState())));
+    }
+
+    public CompletableFuture<ServerOutput> renewItem (String username, String isbn, String copyNumber) throws ExecutionException, InterruptedException {
+        return input("renew", ClientState.USER)
+                .thenApply(r -> now(input(String.format("%s,%s,%s", username, isbn, copyNumber), r.getState())));
+    }
 }

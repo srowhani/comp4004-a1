@@ -101,7 +101,7 @@ public class LoanTable {
 
     public void renewItem(int userId, String isbn, String copyNumber, Date renewDate) throws NoSuchLoanExistsException, MaximumBorrowedItemsExceededException, OutstandingFeeExistsException, ItemAlreadyRenewedException {
 
-        if (LoanTable.getInstance().checkLimit(userId)) {
+        if (!LoanTable.getInstance().checkLimit(userId)) {
             logger.info(String.format("Operation:Renew Item;Loan Info:[%d,%s,%s,%s];State:Fail;Reason:The maximum Number of Items is Reached.", userId, isbn, copyNumber, renewDate.toString()));
             throw new MaximumBorrowedItemsExceededException();
         }
@@ -111,26 +111,31 @@ public class LoanTable {
             throw new OutstandingFeeExistsException();
         }
 
-        Optional<LoanEntity> loanEntityOptional = loanList.stream().filter(loanEntity ->
-                loanEntity.getUserId() == userId &&
-                        loanEntity.getISBN().equals(isbn) &&
-                        loanEntity.getCopyNumber().equals(copyNumber)
-        ).findFirst();
+        int index = -1;
+        LoanEntity loanEntity = null;
 
-        if (!loanEntityOptional.isPresent()) {
+        for (int i = 0 ; i < loanList.size() ; i++) {
+            loanEntity = loanList.get(i);
+            if (loanEntity.getUserId() == userId &&
+                loanEntity.getISBN().equals(isbn) &&
+                loanEntity.getCopyNumber().equals(copyNumber)) {
+                index = i;
+                break;
+            }
+        }
+
+
+        if (index == -1) {
             logger.info(String.format("Operation:Renew Item;Loan Info:[%d,%s,%s,%s];State:Fail;Reason:The loan does not exist.", userId, isbn, copyNumber, renewDate.toString()));
             throw new NoSuchLoanExistsException();
         }
-
-        LoanEntity loanEntity = loanEntityOptional.get();
 
         if (!loanEntity.getRenewState().equals("0")) {
             logger.info(String.format("Operation:Renew Item;Loan Info:[%d,%s,%s,%s];State:Fail;Reason:Renewed Item More Than Once for the Same Loan.", userId, isbn, copyNumber, renewDate.toString()));
             throw new ItemAlreadyRenewedException();
         }
-
-        loanEntity.setDate(new Date());
-        loanEntity.setRenewState("1");
+        loanList.get(index).setDate(new Date());
+        loanList.get(index).setRenewState("1");
         logger.info(String.format("Operation:Renew Item;Loan Info:[%d,%s,%s,%s];State:Success", userId, isbn, copyNumber, renewDate.toString()));
     }
 
