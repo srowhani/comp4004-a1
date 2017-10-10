@@ -2,10 +2,14 @@ import main.java.server.io.handler.ClientInputHandler;
 import main.java.server.io.handler.ClientInputReader;
 import main.java.server.io.handler.model.ClientState;
 import main.java.server.io.handler.model.ServerOutput;
+import main.java.util.Config;
 import main.java.util.Trace;
 import org.apache.log4j.Logger;
 
 import java.util.concurrent.CompletableFuture;
+
+import static main.java.server.io.handler.model.ClientState.FINISHWAITING;
+import static main.java.server.io.handler.model.ClientState.WAITING;
 
 public class AcceptanceTest {
     private Logger logger = Trace.getInstance().getLogger("operation_file");
@@ -26,5 +30,10 @@ public class AcceptanceTest {
 
     public ServerOutput now(CompletableFuture<ServerOutput> serverOutputCompletableFuture) {
         return serverOutputCompletableFuture.getNow(null);
+    }
+
+    public CompletableFuture<ServerOutput> clerkLogin () {
+        return input("Clerk", FINISHWAITING)
+            .thenApply(output -> now(input(Config.CLERK_PASSWORD, output.getState())));
     }
 }
