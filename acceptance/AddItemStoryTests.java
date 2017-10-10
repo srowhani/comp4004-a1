@@ -5,9 +5,6 @@ import java.util.concurrent.ExecutionException;
 
 import static org.junit.Assert.assertEquals;
 
-/**
- * Maps to test 1
- */
 public class AddItemStoryTests extends AcceptanceTest {
     @Test
     public void addItemIfDoesntExist() throws ExecutionException, InterruptedException {

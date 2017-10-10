@@ -11,6 +11,7 @@ public class ReturnItemStoryTests extends AcceptanceTest {
     // If loan has been overdue for more than three days, the user tied to the loan will have privileges revoked.
     @Test
     public void revokesUserPrivilegesForOverdueLoan () throws ExecutionException, InterruptedException {
+        scenario("revokesUserPrivilegesForOverdueLoan");
         String username = "test-user-test";
         String isbn = "6666666666666";
         createUser(username, "password").get();
@@ -26,6 +27,7 @@ public class ReturnItemStoryTests extends AcceptanceTest {
     // If loan is not overdue, loan entity is destroyed from list.
     @Test
     public void deletesLoanCorrectly () throws ExecutionException, InterruptedException {
+        scenario("deletesLoanCorrectly");
         String username = "test-user-test-2";
         String isbn = "6666666666665";
         createUser(username, "pass").get();
