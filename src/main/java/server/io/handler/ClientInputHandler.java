@@ -7,6 +7,7 @@ import main.java.server.io.handler.model.ServerOutput;
 import main.java.server.io.model.UserEntity;
 import main.java.util.Config;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Optional;
 
@@ -289,7 +290,7 @@ public class ClientInputHandler {
         String[] strArray = csvUsernameIsbnCopynumber.split(",");
         Optional<UserEntity> userEntityOptional = UserTable.getInstance().lookup(user -> user.getUsername().equals(strArray[0]));
         Object result = "";
-        if (strArray.length != 3) {
+        if (strArray.length < 3) {
             output.setOutput("Your input should in this format:'useremail,ISBN,copynumber'");
             output.setState(RETURN);
         } else if (!userEntityOptional.isPresent()) {
@@ -303,7 +304,14 @@ public class ClientInputHandler {
                 output.setState(RETURN);
             } else {
                 try {
-                    LoanTable.getInstance().returnItem(userEntityOptional.get().getId(), strArray[1], strArray[2], new Date());
+                    Date d = new Date();
+                    if (strArray.length == 4) {
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTime(d);
+                        calendar.add(Calendar.DAY_OF_YEAR, Integer.parseInt(strArray[3]));
+                        d = calendar.getTime();
+                    }
+                    LoanTable.getInstance().returnItem(userEntityOptional.get().getId(), strArray[1], strArray[2], d);
                     output.setOutput("Success!");
                 } catch (NoSuchLoanExistsException e) {
                     output.setOutput(e.getMessage());
