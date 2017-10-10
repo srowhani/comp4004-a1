@@ -32,7 +32,7 @@ public class PayFineStoryTests extends AcceptanceTest {
             assertEquals("Success!", borrowResultOutput.getOutput());
             return now(input("return", borrowResultOutput.getState()));
         }) // pay loan on later date
-        .thenAccept(payFineMenu -> now(input("test-user-987654321,9781442668584,0,10", payFineMenu.getState()))).get();
+        .thenAccept(returnItemMenu -> now(input("test-user-987654321,9781442668584,0,10", returnItemMenu.getState()))).get();
         // try to withdraw, and fail
         input("borrow", ClientState.USER)
         .thenApply(borrowMenuOutput -> now(input("test-user-987654321,9781442668584,1", borrowMenuOutput.getState())))
@@ -42,10 +42,31 @@ public class PayFineStoryTests extends AcceptanceTest {
     }
 
     @Test
-    public void userAllowedToReturnItemsAfterPayingFine () {
-        fail();
+    public void userAllowedToBorrowItemsAfterPayingFine () throws ExecutionException, InterruptedException {
+        clerkLogin()
+        .thenApply(clerkLoginOutput -> now(input("create user", clerkLoginOutput.getState())))
+        .thenApply(beginCreateUser -> now(input("test-user-99999,pass", beginCreateUser.getState())))
+        .get();
+
+        input("pay fine", ClientState.USER)
+        .thenApply(payFineMenu -> now(input("test-user-99999", payFineMenu.getState())))
+        .get();
+
+        input("borrow", ClientState.USER)
+        .thenApply(borrowMenuOutput -> now(input("test-user-99999,9781442668584,0", borrowMenuOutput.getState())))
+        .thenApply(borrowResultOutput -> now(input("return", ClientState.USER)))
+        .thenApply(borrowResultOutput -> now(input("test-user-99999,9781442668584,0,10", borrowResultOutput.getState())))
+        .get();
+
+        input("pay fine", ClientState.USER)
+        .thenApply(payFineMenu -> now(input("test-user-99999", payFineMenu.getState())))
+        .get();
+
+        input("borrow", ClientState.USER)
+        .thenApply(borrowMenuOutput -> now(input("test-user-99999,9781442668584,0", borrowMenuOutput.getState())))
+        .thenAccept(borrowResultOutput -> {
+            assertEquals("Success!", borrowResultOutput.getOutput());
+        }).get();
+
     }
-
-    // User must be allowed to borrow books again.
-
 }
