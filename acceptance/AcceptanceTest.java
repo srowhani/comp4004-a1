@@ -9,8 +9,6 @@ import main.java.server.io.handler.model.ServerOutput;
 import main.java.util.Config;
 import main.java.util.Trace;
 import org.apache.log4j.Logger;
-import org.junit.After;
-import org.junit.Before;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
