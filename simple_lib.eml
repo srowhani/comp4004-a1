@@ -6,13 +6,8 @@
 		<testFolder url="file://$MODULE_DIR$/test"/>
 		<testFolder url="file://$MODULE_DIR$/acceptance"/>
 	</contentEntry>
-	<lib name="hamcrest-core-1.3.jar" scope="COMPILE">
-		<relative-module-cls project-related="jar://$PROJECT_DIR$/hamcrest-core-1.3.jar!/"/>
-	</lib>
-	<lib name="log4j-1.2.8.jar" scope="COMPILE">
-		<relative-module-cls project-related="jar://$PROJECT_DIR$/log4j-1.2.8.jar!/"/>
-	</lib>
-	<lib name="junit-4.12.jar" scope="COMPILE">
-		<relative-module-cls project-related="jar://$PROJECT_DIR$/junit-4.12.jar!/"/>
-	</lib>
+	<levels>
+		<level name="info.cukes:cucumber-java8:1.2.5" value="project"/>
+		<level name="io.cucumber:cucumber-junit:2.0.0" value="project"/>
+	</levels>
 </component>
