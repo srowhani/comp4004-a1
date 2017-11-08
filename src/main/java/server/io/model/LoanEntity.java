@@ -11,18 +11,18 @@ public class LoanEntity {
     private String isbn;
     private String copyNumber;
     private Date date;
-    private String renewState;
+    private int renewCount;
 
     public LoanEntity() {
 
     }
 
-    public LoanEntity(int userId, String isbn, String copyNumber, Date date, String renewState) {
+    public LoanEntity(int userId, String isbn, String copyNumber, Date date, int renewCount) {
         this.userId = userId;
         this.isbn = isbn;
         this.copyNumber = copyNumber;
         this.date = date;
-        this.renewState = renewState;
+        this.renewCount = renewCount;
     }
 
     public int getUserId() {
@@ -57,17 +57,21 @@ public class LoanEntity {
         this.date = date;
     }
 
-    public String getRenewState() {
-        return renewState;
+    public int getRenewCount() {
+        return renewCount;
     }
 
-    public void setRenewState(String renewState) {
-        this.renewState = renewState;
+    public void setRenewCount(int renewCount) {
+        this.renewCount = renewCount;
     }
 
     @Override
     public String toString() {
-        return String.format("[%s, %s, %s, %s, %s]",
-                userId, isbn, copyNumber, dateFormat.format(date), renewState);
+        return String.format("[%s, %s, %s, %s, %d]",
+                userId, isbn, copyNumber, dateFormat.format(date), renewCount);
+    }
+
+    public void incrementRenewCount() {
+        renewCount++;
     }
 }

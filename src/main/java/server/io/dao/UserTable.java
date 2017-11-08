@@ -15,27 +15,14 @@ import java.util.function.Predicate;
 public class UserTable {
     private final Logger logger = Trace.getInstance().getLogger("operation_file");
     private List<UserEntity> userList = new ArrayList<>();
-    private int numUsers = 0;
 
     private static class UserListHolder {
         private static final UserTable INSTANCE = new UserTable();
     }
 
     private UserTable() {
-        String[] passwordList = new String[]{"Zhix bo", "Yu", "Michelle", "Kevin", "Sun"};
-        String[] usernameList = new String[]{"Zhibo@carleton.ca", "Yu@carleton.ca", "Michelle@carleton.ca", "Kevin@carleton.ca", "Sun@carleton.ca"};
-
-        for (int i = 0; i < usernameList.length; i++) {
-            try {
-                add(usernameList[i], passwordList[i]);
-            } catch (UserEntityExistsException e) {
-                logger.error(e.getMessage());
-            }
-        }
         logger.info(String.format("Operation:Initialize UserTable;UserTable: %s", userList));
     }
-
-    ;
 
     public static UserTable getInstance() {
         return UserListHolder.INSTANCE;
@@ -46,7 +33,7 @@ public class UserTable {
             logger.info(String.format("Operation:Create New User;User Info:[%s,%s];State:Fail;Reason:The User already existed.", username, password));
             throw new UserEntityExistsException();
         }
-        UserEntity userEntity = new UserEntity(numUsers++, username, password);
+        UserEntity userEntity = new UserEntity(userList.size(), username, password);
 
         userList.add(userEntity);
         logger.info(String.format("Operation:Create New User;User Info:[%s,%s];State:Success", username, password));

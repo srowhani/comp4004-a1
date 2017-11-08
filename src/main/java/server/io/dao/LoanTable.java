@@ -21,9 +21,6 @@ public class LoanTable {
     }
 
     private LoanTable() {
-        //set up the default list with some instances
-        LoanEntity loan = new LoanEntity(0, "9781442668584", "1", new Date(), "0");
-        loanList.add(loan);
         logger.info(String.format("Operation:Initialize LoanTable;LoanTable: %s", loanList));
     }
 
@@ -39,13 +36,12 @@ public class LoanTable {
     }
 
     public void createLoan(int userId, String titleISBN, String copyNumber, Date date) throws MaximumBorrowedItemsExceededException, OutstandingFeeExistsException, NoSuchISBNExistsException, UserEntityNotFoundException, ItemEntityNotFoundException, ItemNotAvailableException {
-        String result = "";
         boolean user = UserTable.getInstance().lookup(userEntity -> userEntity.getId() == userId).isPresent();
         boolean isbn = TitleTable.getInstance().lookup(titleEntity -> titleEntity.getISBN().equals(titleISBN)).isPresent();
         boolean copynumber = ItemTable.getInstance().lookup(itemEntity ->
                 itemEntity.getISBN().equals(titleISBN) && itemEntity.getCopyNumber().equals(copyNumber)).isPresent();
         boolean oloan = !LoanTable.getInstance().lookup(loanEntity ->
-                loanEntity.getUserId() == userId && loanEntity.getISBN().equals(titleISBN) && loanEntity.getCopyNumber().equals(copyNumber)
+                loanEntity.getISBN().equals(titleISBN) && loanEntity.getCopyNumber().equals(copyNumber)
         ).isPresent();
 
         boolean limit = LoanTable.getInstance().checkLimit(userId);
@@ -63,7 +59,7 @@ public class LoanTable {
         } else {
             if (oloan) {
                 if (limit && !fee) {
-                    LoanEntity loan = new LoanEntity(userId, titleISBN, copyNumber, date, "0");
+                    LoanEntity loan = new LoanEntity(userId, titleISBN, copyNumber, date, 0);
                     loanList.add(loan);
                     logger.info(String.format("Operation:Borrow Item;Loan Info:[%d,%s,%s,%s];State:Success", userId, titleISBN, copyNumber, date.toString()));
                 } else if (limit == false) {
@@ -130,12 +126,12 @@ public class LoanTable {
             throw new NoSuchLoanExistsException();
         }
 
-        if (!loanEntity.getRenewState().equals("0")) {
+        if (loanEntity.getRenewCount() > Config.MAX_RENEWALS) {
             logger.info(String.format("Operation:Renew Item;Loan Info:[%d,%s,%s,%s];State:Fail;Reason:Renewed Item More Than Once for the Same Loan.", userId, isbn, copyNumber, renewDate.toString()));
             throw new ItemAlreadyRenewedException();
         }
         loanList.get(index).setDate(new Date());
-        loanList.get(index).setRenewState("1");
+        loanList.get(index).incrementRenewCount();
         logger.info(String.format("Operation:Renew Item;Loan Info:[%d,%s,%s,%s];State:Success", userId, isbn, copyNumber, renewDate.toString()));
     }
 

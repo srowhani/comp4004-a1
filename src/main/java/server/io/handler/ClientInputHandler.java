@@ -81,9 +81,9 @@ public class ClientInputHandler {
         return output;
     }
 
-    public ServerOutput createTitle(String input) {
+    public ServerOutput createTitle(String csvIsbnTitle) {
         ServerOutput output = new ServerOutput();
-        String[] strArray = input.split(",");
+        String[] strArray = csvIsbnTitle.split(",");
         boolean number = isInteger(strArray[0]);
 
         if (strArray.length != 2 || number != true) {
@@ -101,17 +101,15 @@ public class ClientInputHandler {
         return output;
     }
 
-    public ServerOutput createItem(String input) {
+    public ServerOutput createItem(String isbn) {
         ServerOutput output = new ServerOutput();
-        String[] strArray = input.split(",");
-        boolean number = isInteger(strArray[0]);
-        Object result = "";
-        if (strArray.length != 1 || number != true) {
+        boolean number = isInteger(isbn);
+        if (!number) {
             output.setOutput("Your input should in this format:'ISBN',ISBN should be a 13-digit number");
             output.setState(CREATEITEM);
         } else {
             try {
-                ItemTable.getInstance().addItem(strArray[0]);
+                ItemTable.getInstance().addItem(isbn);
                 output.setOutput("Success!");
                 output.setState(CLERK);
             } catch (NoSuchISBNExistsException e) {
@@ -165,9 +163,9 @@ public class ClientInputHandler {
         return output;
     }
 
-    public ServerOutput deleteItem(String input) {
+    public ServerOutput deleteItem(String csvIsbnCopyNumber) {
         ServerOutput output = new ServerOutput();
-        String[] strArray = input.split(",");
+        String[] strArray = csvIsbnCopyNumber.split(",");
         boolean number = isInteger(strArray[0]);
         Object result = "";
         if (strArray.length != 2 || number != true) {

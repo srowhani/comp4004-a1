@@ -24,9 +24,6 @@ public class FeeTable {
 
     private FeeTable() {
         //set up the default list with some instances
-        FeeEntity fee = new FeeEntity(0, 5);
-        feeList.add(fee);
-
         List<LoanEntity> loanList = LoanTable.getInstance().getLoanTable();
 
         long ts = new Date().getTime();

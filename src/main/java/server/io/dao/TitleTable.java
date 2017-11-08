@@ -3,6 +3,7 @@ package main.java.server.io.dao;
 import main.java.server.io.error.LoanExistsException;
 import main.java.server.io.error.TitleEntityExistsException;
 import main.java.server.io.error.TitleEntityNotFoundException;
+import main.java.server.io.error.TitleInstanceExistsException;
 import main.java.server.io.model.TitleEntity;
 import main.java.util.Trace;
 import org.apache.log4j.Logger;
@@ -21,13 +22,6 @@ public class TitleTable {
     }
 
     private TitleTable() {
-        //set up the default list with some instances
-        String[] ISBNList = new String[]{"9781442668584", "9781442616899", "9781442667181", "9781611687910", "9781317594277"};
-        String[] titlenameList = new String[]{"By the grace of God", "Dante's lyric poetry ", "Courtesy lost", "Writing for justice", "The act in context"};
-        for (int i = 0; i < ISBNList.length; i++) {
-            TitleEntity detitle = new TitleEntity(ISBNList[i], titlenameList[i]);
-            titleList.add(detitle);
-        }
         logger.info(String.format("Operation:Initialize TitleTable;TitleTable: %s", titleList));
     }
 
@@ -57,7 +51,7 @@ public class TitleTable {
                 .findFirst();
     }
 
-    public TitleEntity remove(String isbn) throws TitleEntityNotFoundException, LoanExistsException {
+    public TitleEntity remove(String isbn) throws TitleEntityNotFoundException, LoanExistsException, TitleInstanceExistsException {
         Optional<TitleEntity> title = titleList
                 .stream()
                 .filter(userEntity -> userEntity.getISBN().equals(isbn))
@@ -71,6 +65,9 @@ public class TitleTable {
             throw new TitleEntityNotFoundException();
         }
 
+        if (ItemTable.getInstance().lookup(item -> item.getISBN().equals(isbn)).isPresent()) {
+            throw new TitleInstanceExistsException();
+        }
         titleList.remove(title.get());
         return title.get();
     }

@@ -15,24 +15,12 @@ import java.util.function.Predicate;
 public class ItemTable {
     private Logger logger = Trace.getInstance().getLogger("operation_file");
     private List<ItemEntity> itemList = new ArrayList<>();
-    private int numItems = 0;
 
     private static class ItemListHolder {
         private static final ItemTable INSTANCE = new ItemTable();
     }
 
     private ItemTable() {
-        //set up the default list with some instances
-        String[] ISBNList = new String[]{"9781442668584", "9781442616899", "9781442667181", "9781611687910"};
-        String[] cnList = new String[]{"1", "1", "1", "1"};
-
-        for (int i = 0; i < ISBNList.length; i++) {
-            try {
-                addItem(ISBNList[i]);
-            } catch (NoSuchISBNExistsException e) {
-                logger.error(e.getMessage());
-            }
-        }
 
         logger.info(String.format("Operation:Initialize ItemTable;ItemTable: %s", itemList));
     }
@@ -52,7 +40,7 @@ public class ItemTable {
                 .filter(item -> item.getISBN().equals(isbn))
                 .count());
 
-        ItemEntity itemEntity = new ItemEntity(numItems++, isbn, copyNumber);
+        ItemEntity itemEntity = new ItemEntity(itemList.size(), isbn, copyNumber);
         itemList.add(itemEntity);
 
         logger.info(String.format("Operation:Create New Item;Item Info:[%s,%s];State:Success", isbn, copyNumber));
