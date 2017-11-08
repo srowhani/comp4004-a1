@@ -92,15 +92,11 @@ public class LoanTable {
         if (borrowedItemsCount >= Config.MAX_BORROWED_ITEMS) {
             return false;
         }
+
         return true;
     }
 
-    public void renewItem(int userId, String isbn, String copyNumber, Date renewDate) throws NoSuchLoanExistsException, MaximumBorrowedItemsExceededException, OutstandingFeeExistsException, ItemAlreadyRenewedException {
-
-        if (!LoanTable.getInstance().checkLimit(userId)) {
-            logger.info(String.format("Operation:Renew Item;Loan Info:[%d,%s,%s,%s];State:Fail;Reason:The maximum Number of Items is Reached.", userId, isbn, copyNumber, renewDate.toString()));
-            throw new MaximumBorrowedItemsExceededException();
-        }
+    public void renewItem(int userId, String isbn, String copyNumber, Date renewDate) throws NoSuchLoanExistsException, OutstandingFeeExistsException, ItemAlreadyRenewedException {
 
         if (FeeTable.getInstance().lookupFee(userId) > 0) {
             logger.info(String.format("Operation:Renew Item;Loan Info:[%d,%s,%s,%s];State:Fail;Reason:Outstanding Fee Exists.", userId, isbn, copyNumber, renewDate.toString()));
@@ -126,7 +122,7 @@ public class LoanTable {
             throw new NoSuchLoanExistsException();
         }
 
-        if (loanEntity.getRenewCount() > Config.MAX_RENEWALS) {
+        if (loanEntity.getRenewCount() >= Config.MAX_RENEWALS) {
             logger.info(String.format("Operation:Renew Item;Loan Info:[%d,%s,%s,%s];State:Fail;Reason:Renewed Item More Than Once for the Same Loan.", userId, isbn, copyNumber, renewDate.toString()));
             throw new ItemAlreadyRenewedException();
         }
